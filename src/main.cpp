@@ -2,7 +2,9 @@
 #include "LeoEngine/Game.hpp"
 #include "LeoEngine/SceneCollection.hpp"
 #include "LeoEngine/File.hpp"
-#include "LeoEngine/SceneTest.hpp"
+#include "LeoEngine/RandomNumberGenerator.hpp"
+#include "SceneTest.hpp"
+#include "CharacterFixedMovement.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -20,7 +22,15 @@ int main(int argc, char* argv[])
     LeoEngine::File::setWriteDirectory("TurboCity", "GlobalGameJameVancouver2026");
 
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();
-    int testSceneID = gameSceneCollection.addScene<LeoEngine::SceneTest>();
+    int testSceneID = gameSceneCollection.addScene<SceneTest>();
+    SceneTest* testScene = static_cast<SceneTest*>(gameSceneCollection.getScene(testSceneID));
+
+    LeoEngine::RandomNumberGenerator rng;
+
+    for (int i = 0; i < 100; i++)
+    {
+        // testScene->addCharacter(new CharacterFixedMovement(LeoEngine::Pair<double, double>(rng.getNextNumber(0, 190), rng.getNextNumber(0, 190)), LeoEngine::Colour(rng.getNextNumber(0x55, 0xFF), rng.getNextNumber(0x55, 0xFF), rng.getNextNumber(0x55, 0xFF), 0xFF), LeoEngine::Pair<double, double>(rng.getNextNumber(50, 100) * (rng.getNextNumber(0,1)?-1:1), rng.getNextNumber(25, 75) * (rng.getNextNumber(0,1)?-1:1))));
+    }
 
     gameSceneCollection.setCurrentScene(testSceneID);
 
