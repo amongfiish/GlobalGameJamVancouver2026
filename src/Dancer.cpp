@@ -54,3 +54,23 @@ LeoEngine::Pair<int, int> Dancer::getAbsolutePosition() const
     return _absolutePosition;
 }
 
+void reSortDancerByY(std::vector<Dancer>& dancerVector, int i)
+{
+    int j = i;
+    bool sorted = false;
+    while (!sorted)
+    {
+        if (j != 0 && dancerVector.at(j-1).getAbsolutePosition().second > dancerVector.at(j).getAbsolutePosition().second)
+        {
+            Dancer tempDancer = std::move(dancerVector.at(j));
+            dancerVector.at(j) = dancerVector.at(j-1);
+            dancerVector.at(j-1) = tempDancer;
+            j--;
+        }
+        else
+        {
+            break;
+        }
+    }
+}
+

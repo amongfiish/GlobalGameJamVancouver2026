@@ -58,5 +58,7 @@ private:
     LeoEngine::SpriteAnimated _sprite;
 };
 
+void reSortDancerByY(std::vector<Dancer>& dancerVector, int i);
+
 #endif
 
