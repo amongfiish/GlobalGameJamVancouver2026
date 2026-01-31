@@ -10,7 +10,7 @@ const std::string Dancer::_ANIMATION_FILENAMES[] = {
     "dancer_d.png"
 };
 
-Dancer::Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)> positionFunction, LeoEngine::Pair<double, double> origin, LeoEngine::Pair<double, double> scale, double initialTime, double speed)
+Dancer::Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> origin, LeoEngine::Pair<double, double> scale, double initialTime, double speed)
     : _type(type),
       _elapsedTime(0.0),
       _positionFunction(positionFunction),
@@ -18,7 +18,7 @@ Dancer::Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)>
       _initialTime(initialTime),
       _speed(speed)
 {
-    _sprite.setAnimation(LeoEngine::createAnimationFromStripData(_ANIMATION_FILENAMES[static_cast<int>(_type)], SIZE, SIZE, 1, 0.5));
+    _sprite.setAnimation(LeoEngine::createAnimationFromStripData(_ANIMATION_FILENAMES[static_cast<int>(_type)], SIZE, SIZE, 12, 0.1));
     _sprite.getSprite().setSize(SIZE, SIZE);
 }
 
@@ -31,7 +31,7 @@ void Dancer::update(double deltaTime)
 {
     _elapsedTime += deltaTime * _speed;
 
-    LeoEngine::Pair<double, double> rawPosition = _positionFunction(_elapsedTime + _initialTime);
+    LeoEngine::Pair<double, double> rawPosition = (*_positionFunction)(_elapsedTime + _initialTime);
     
     // apply scale first
     LeoEngine::Pair<double, double> transformedPosition(rawPosition.first * _scale.first + _origin.first, rawPosition.second * _scale.second + _origin.second);
@@ -41,7 +41,7 @@ void Dancer::update(double deltaTime)
 
     _sprite.getSprite().setPosition(_absolutePosition.first, _absolutePosition.second);
 
-    _sprite.update(_elapsedTime);
+    _sprite.update(deltaTime);
 }
 
 void Dancer::draw()
@@ -58,19 +58,12 @@ void reSortDancerByY(std::vector<Dancer>& dancerVector, int i)
 {
     int j = i;
     bool sorted = false;
-    while (!sorted)
+    while (j != 0 && dancerVector.at(j-1).getAbsolutePosition().second > dancerVector.at(j).getAbsolutePosition().second)
     {
-        if (j != 0 && dancerVector.at(j-1).getAbsolutePosition().second > dancerVector.at(j).getAbsolutePosition().second)
-        {
-            Dancer tempDancer = std::move(dancerVector.at(j));
-            dancerVector.at(j) = dancerVector.at(j-1);
-            dancerVector.at(j-1) = tempDancer;
-            j--;
-        }
-        else
-        {
-            break;
-        }
+        Dancer tempDancer = std::move(dancerVector.at(j));
+        dancerVector.at(j) = dancerVector.at(j-1);
+        dancerVector.at(j-1) = tempDancer;
+        j--;
     }
 }
 

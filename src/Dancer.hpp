@@ -18,7 +18,7 @@ public:
         DANCER_D 
     };
 
-    Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)> positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);
+    Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);
     ~Dancer();
 
     void update(double deltaTime);
@@ -42,7 +42,7 @@ private:
 
     double _elapsedTime;
 
-    std::function<LeoEngine::Pair<double, double>(double)> _positionFunction;
+    std::function<LeoEngine::Pair<double, double>(double)>* _positionFunction;
 
     // transform for character dance pattern
     LeoEngine::Pair<double, double> _origin;

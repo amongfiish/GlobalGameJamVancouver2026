@@ -18,6 +18,8 @@ public:
     virtual void onDeactivate() override {}
 
 private:
+    std::function<LeoEngine::Pair<double, double>(double)> circleFunction;
+    std::function<LeoEngine::Pair<double, double>(double)> sinFunction;
     std::vector<Dancer> _dancers;
 };
 
