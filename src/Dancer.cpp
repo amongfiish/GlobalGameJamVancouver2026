@@ -16,7 +16,8 @@ Dancer::Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)>
       _positionFunction(positionFunction),
       _origin(origin), _scale(scale),
       _initialTime(initialTime),
-      _speed(speed)
+      _speed(speed),
+      _levelSpeedMultiplier(1.0)
 {
     _sprite.setAnimation(LeoEngine::createAnimationFromStripData(_ANIMATION_FILENAMES[static_cast<int>(_type)], SIZE, SIZE, 12, 0.1));
     _sprite.getSprite().setSize(SIZE, SIZE);
@@ -52,6 +53,11 @@ void Dancer::draw()
 LeoEngine::Pair<int, int> Dancer::getAbsolutePosition() const
 {
     return _absolutePosition;
+}
+
+void Dancer::setLevelSpeedMultiplier(double multiplier)
+{
+    _levelSpeedMultiplier = multiplier;
 }
 
 void reSortDancerByY(std::vector<Dancer>& dancerVector, int i)

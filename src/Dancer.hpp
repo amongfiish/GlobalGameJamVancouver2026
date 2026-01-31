@@ -26,6 +26,8 @@ public:
 
     LeoEngine::Pair<int, int> getAbsolutePosition() const;
 
+    void setLevelSpeedMultiplier(double multiplier);
+
     static constexpr int NUMBER_OF_TYPES = 4;
 
     static constexpr int SIZE = 32;
@@ -51,6 +53,8 @@ private:
     // time to offset function time parameter by
     double _initialTime;
     double _speed;
+
+    double _levelSpeedMultiplier;
 
     // position at which the character is drawn
     LeoEngine::Pair<int, int> _absolutePosition;
