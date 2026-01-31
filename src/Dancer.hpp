@@ -18,11 +18,13 @@ public:
         DANCER_D 
     };
 
-    Dancer(Type type, std::function<LeoEngine::Pair<int, int>(double)> positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime);
+    Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)> positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);
     ~Dancer();
 
     void update(double deltaTime);
     void draw();
+
+    LeoEngine::Pair<int, int> getAbsolutePosition() const;
 
     static constexpr int NUMBER_OF_TYPES = 4;
 
@@ -40,7 +42,7 @@ private:
 
     double _elapsedTime;
 
-    std::function<LeoEngine::Pair<int, int>(double)> _positionFunction;
+    std::function<LeoEngine::Pair<double, double>(double)> _positionFunction;
 
     // transform for character dance pattern
     LeoEngine::Pair<double, double> _origin;
@@ -48,6 +50,7 @@ private:
 
     // time to offset function time parameter by
     double _initialTime;
+    double _speed;
 
     // position at which the character is drawn
     LeoEngine::Pair<int, int> _absolutePosition;

@@ -1,6 +1,7 @@
 #ifndef SCENE_TESTING_HPP
 #define SCENE_TESTING_HPP
 
+#include <vector>
 #include "LeoEngine/Scene.hpp"
 #include "Dancer.hpp"
 
@@ -17,7 +18,7 @@ public:
     virtual void onDeactivate() override {}
 
 private:
-    Dancer _testDancer;
+    std::vector<Dancer> _dancers;
 };
 
 #endif
