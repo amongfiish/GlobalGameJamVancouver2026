@@ -31,6 +31,31 @@ Dancer::~Dancer()
 
 }
 
+double adjustForBounce(double n)
+{
+    int floorN = static_cast<int>(floor(n));
+    int modFloorN = (floorN % 4 + 4) % 4;
+
+    bool flipN = modFloorN == 1 || modFloorN == 2;
+
+    double fracN = n - floorN;
+    
+    int modTwoN = modFloorN % 2;
+
+    double adjustedN = fracN;
+    if (modTwoN != 0)
+    {
+        adjustedN -= 1;
+    }
+
+    if (flipN)
+    {
+        adjustedN *= -1;
+    }
+
+    return adjustedN;
+}
+
 void Dancer::update(double deltaTime)
 {
     _elapsedTime += deltaTime * (_speed * _levelSpeedMultiplier);
@@ -40,26 +65,11 @@ void Dancer::update(double deltaTime)
     // apply scale first
     LeoEngine::Pair<double, double> transformedPosition(rawPosition.first * _scale.first + _origin.first, rawPosition.second * _scale.second + _origin.second);
 
-    // wrap position
-    while (transformedPosition.first < -1.0)
-    {
-        transformedPosition.first += 2.0;
-    }
-    while (transformedPosition.first > 1.0)
-    {
-        transformedPosition.first -= 2.0;
-    }
-    while (transformedPosition.second < -1.0)
-    {
-        transformedPosition.second += 2.0;
-    }
-    while (transformedPosition.second > 1.0)
-    {
-        transformedPosition.second -= 2.0;
-    }
+    double adjustedX = adjustForBounce(transformedPosition.first);
+    double adjustedY = adjustForBounce(transformedPosition.second);
 
-    _absolutePosition.first = transformedPosition.first * Level::DANCE_FLOOR_WIDTH/2 + Level::DANCE_FLOOR_START_X + Level::DANCE_FLOOR_WIDTH/2 - SIZE/2;
-    _absolutePosition.second = transformedPosition.second * Level::DANCE_FLOOR_HEIGHT/2 + Level::DANCE_FLOOR_START_Y + Level::DANCE_FLOOR_HEIGHT/2 - SIZE + 6;
+    _absolutePosition.first = adjustedX * Level::DANCE_FLOOR_WIDTH/2 + Level::DANCE_FLOOR_START_X + Level::DANCE_FLOOR_WIDTH/2 - SIZE/2;
+    _absolutePosition.second = adjustedY * Level::DANCE_FLOOR_HEIGHT/2 + Level::DANCE_FLOOR_START_Y + Level::DANCE_FLOOR_HEIGHT/2 - SIZE + 6;
 
     _sprite.getSprite().setPosition(_absolutePosition.first, _absolutePosition.second);
 
@@ -74,7 +84,6 @@ void Dancer::draw()
 void Dancer::reset()
 {
     _elapsedTime = 0.0;
-    setType(static_cast<Type>(0));
     update(0.0);
 }
 
@@ -92,18 +101,5 @@ void Dancer::setType(Type type)
 {
     _type = type;
     _sprite.setAnimation(_ANIMATIONS[static_cast<int>(type)]);
-}
-
-void reSortDancerByY(std::vector<Dancer>& dancerVector, int i)
-{
-    int j = i;
-    bool sorted = false;
-    while (j != 0 && dancerVector.at(j-1).getAbsolutePosition().second > dancerVector.at(j).getAbsolutePosition().second)
-    {
-        Dancer tempDancer = std::move(dancerVector.at(j));
-        dancerVector.at(j) = dancerVector.at(j-1);
-        dancerVector.at(j-1) = tempDancer;
-        j--;
-    }
 }
 

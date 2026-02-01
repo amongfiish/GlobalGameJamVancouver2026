@@ -4,8 +4,8 @@
 #include "LeoEngine/Scene.hpp"
 #include "LeoEngine/Sound.hpp"
 #include "LeoEngine/UIText.hpp"
-
-class Level;
+#include "LeoEngine/SpriteStatic.hpp"
+#include "Level.hpp"
 
 class SceneLevel : public LeoEngine::Scene
 {
@@ -50,6 +50,8 @@ private:
     LeoEngine::UIText _timerTextBox;
     void _initializeTimerTextBox();
     void _updateTimerText();
+
+    LeoEngine::SpriteStatic _sidebarBackgroundSprite;
 
     Level* _level;
     

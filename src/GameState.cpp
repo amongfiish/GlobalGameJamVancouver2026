@@ -1,16 +1,16 @@
 #include "GameState.hpp"
 
-Level* GameState::_currentLevel = nullptr;
+std::unique_ptr<Level> GameState::_currentLevel(nullptr);
 double GameState::_timer = 0.0;
 
-void GameState::setCurrentLevel(Level* level)
+void GameState::setCurrentLevel(std::unique_ptr<Level> level)
 {
-    _currentLevel = level;
+    _currentLevel = std::move(level);
 }
 
 Level* GameState::getCurrentLevel()
 {
-    return _currentLevel;
+    return _currentLevel.get();
 }
 
 void GameState::resetTime()

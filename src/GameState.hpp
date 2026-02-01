@@ -8,7 +8,7 @@ class GameState
 public:
     GameState() = delete;
 
-    static void setCurrentLevel(Level* level);
+    static void setCurrentLevel(std::unique_ptr<Level> level);
     static Level* getCurrentLevel();
 
     static void resetTime();
@@ -18,7 +18,7 @@ public:
 private:
     static constexpr double _INITIAL_TIMER = 10.0;
 
-    static Level* _currentLevel;
+    static std::unique_ptr<Level> _currentLevel;
 
     // how long does the player have left?
     static double _timer;

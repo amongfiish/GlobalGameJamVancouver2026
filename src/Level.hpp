@@ -4,6 +4,7 @@
 #include <vector>
 #include "LeoEngine/SpriteStatic.hpp"
 #include "LeoEngine/UIText.hpp"
+#include "LeoEngine/Rectangle.hpp"
 #include "Dancer.hpp"
 
 class Level
@@ -23,16 +24,20 @@ public:
     void randomizeDancerTypes(std::vector<Dancer::Type> types);
     void setTarget(int i);
 
+    Dancer* getTarget();
+
+    LeoEngine::Rectangle<int> getTargetBounds() const;
+
     std::vector<Dancer>& getDancers();
 
     void addDancer(Dancer&& dancer);
 
-    static constexpr int BACKGROUND_START_X = 128;
+    static constexpr int BACKGROUND_START_X = 0;
     static constexpr int BACKGROUND_START_Y = 0;
     static constexpr int BACKGROUND_WIDTH = 256;
     static constexpr int BACKGROUND_HEIGHT = 256;
 
-    static constexpr int DANCE_FLOOR_START_X = 128;
+    static constexpr int DANCE_FLOOR_START_X = 0;
     static constexpr int DANCE_FLOOR_START_Y = 48;
     static constexpr int DANCE_FLOOR_WIDTH = 256;
     static constexpr int DANCE_FLOOR_HEIGHT = 208;
@@ -41,8 +46,10 @@ private:
     static LeoEngine::SpriteStatic _backgroundSprite;
     static LeoEngine::SpriteStatic _makeBackgroundSprite();
 
+    void _reSortDancerByY(int i);
+
     std::vector<Dancer> _dancers;
-    int _target;
+    Dancer* _target;
     Dancer::Type _targetType;
 
     double _speedMultiplier;

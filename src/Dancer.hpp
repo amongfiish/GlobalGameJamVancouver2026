@@ -41,9 +41,8 @@ public:
 private:
     static const std::shared_ptr<LeoEngine::Animation> _ANIMATIONS[NUMBER_OF_TYPES];
 
-    static constexpr int _NUMBER_OF_ANIMATION_FRAMES = 1;
-    static constexpr double _ANIMATION_FRAME_DISPLAY_LENGTH = 0.1;
-
+    static constexpr int _NUMBER_OF_ANIMATION_FRAMES = 2;
+    static constexpr double _ANIMATION_FRAME_DISPLAY_LENGTH = 60/((110.0/3.0)*2.0);
 
     Type _type;
 
@@ -66,8 +65,6 @@ private:
 
     LeoEngine::SpriteAnimated _sprite;
 };
-
-void reSortDancerByY(std::vector<Dancer>& dancerVector, int i);
 
 #endif
 
