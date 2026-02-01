@@ -6,6 +6,8 @@
 #include "LeoEngine/Animation.hpp"
 #include "LeoEngine/SpriteStatic.hpp"
 #include "SceneMainMenu.hpp"
+#include "GameState.hpp"
+#include "Levels.hpp"
 
 SceneMainMenu::SceneMainMenu()
 {
@@ -24,6 +26,9 @@ void SceneMainMenu::update(double deltaTime)
 
     if (LeoEngine::Services::get().getInput()->getMouseButtonState(1) == LeoEngine::KeyState::PRESSED)
     {
+        GameState::resetLevel();
+        GameState::setCurrentLevel(Levels::makeTutorial());
+
         LeoEngine::EventChangeScene changeSceneEvent(1, 1.0);
         LeoEngine::Event* event = static_cast<LeoEngine::Event*>(&changeSceneEvent);
         LeoEngine::Services::get().getEvents()->broadcast(event);

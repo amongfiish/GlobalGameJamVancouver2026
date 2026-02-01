@@ -2,7 +2,6 @@
 #include "LeoEngine/Game.hpp"
 #include "LeoEngine/SceneCollection.hpp"
 #include "LeoEngine/File.hpp"
-#include "GameState.hpp"
 #include "Levels.hpp"
 #include "SceneMainMenu.hpp"
 #include "SceneLevel.hpp"
@@ -20,14 +19,12 @@ int main(int argc, char* argv[])
     LeoEngine::Services::get().getGraphics()->setWindowFullscreen(false);
     LeoEngine::Services::get().getGraphics()->setWindowResizable(true);
     LeoEngine::Services::get().getGraphics()->setWindowGrabCursor(false);
-    LeoEngine::Services::get().getGraphics()->setRenderVSync(false);
+    LeoEngine::Services::get().getGraphics()->setRenderVSync(true);
     LeoEngine::File::setWriteDirectory("TurboCity", "GlobalGameJameVancouver2026");
 
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();
     int menuSceneID = gameSceneCollection.addScene<SceneMainMenu>();
     int gameSceneID = gameSceneCollection.addScene<SceneLevel>();
-
-    GameState::setCurrentLevel(Levels::makeTutorial());
 
     gameSceneCollection.setCurrentScene(menuSceneID);
 

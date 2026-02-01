@@ -4,6 +4,8 @@
 #include "LeoEngine/Graphics.hpp"
 #include "LeoEngine/Collision.hpp"
 #include "LeoEngine/Colour.hpp"
+#include "LeoEngine/Events.hpp"
+#include "LeoEngine/EventChangeScene.hpp"
 #include "SceneLevel.hpp"
 #include "GameState.hpp"
 #include "numeris_romanis.hpp"
@@ -93,6 +95,8 @@ void SceneLevel::draw()
 
 void SceneLevel::onActivate()
 {
+    _state = State::RUNNING;
+
     _level = GameState::getCurrentLevel();
     _level->reset();
 
@@ -138,7 +142,6 @@ void SceneLevel::_handleVictory()
     GameState::addTime(VICTORY_DELTA_TIME);
     _updateTimerText();
 
-    _unmaskAnimationElapsedTime = 0.0;
     _unmaskAnimationElapsedTime = 0.0;
     _animationSprite.setAnimation(Dancer::VICTORY_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
     _animationSprite.setLoop(false);
@@ -199,6 +202,14 @@ void SceneLevel::_updateRunning(double deltaTime)
 void SceneLevel::_updateGameOver(double deltaTime)
 {
     _animationSprite.update(deltaTime);
+    
+    if (LeoEngine::Services::get().getInput()->getMouseButtonState(1) == LeoEngine::KeyState::PRESSED)
+    {
+        LeoEngine::EventChangeScene changeSceneEvent(0, 1.0);
+        LeoEngine::Event* event = static_cast<LeoEngine::Event*>(&changeSceneEvent);
+        
+        LeoEngine::Services::get().getEvents()->broadcast(event);
+    }
 }
 
 void SceneLevel::_updateVictory(double deltaTime)
@@ -229,6 +240,7 @@ void SceneLevel::_updateVictory(double deltaTime)
         _targetPortrait.setAnimation(Dancer::IDLE_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
 
         _updateLevelCountText();
+        _unmaskSFXTimer = 0.0;
     }
 }
 

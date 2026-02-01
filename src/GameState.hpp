@@ -16,6 +16,7 @@ public:
     static void addTime(double deltaTime);
     static double getTime();
 
+    static void resetLevel();
     static void nextLevel();
     static int getLevel();
 

@@ -31,6 +31,11 @@ double GameState::getTime()
     return _timer;
 }
 
+void GameState::resetLevel()
+{
+    _level = 0;
+}
+
 void GameState::nextLevel()
 {
     static LeoEngine::RandomNumberGenerator _rng;
