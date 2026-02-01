@@ -6,13 +6,20 @@
 
 LeoEngine::RandomNumberGenerator Levels::_rng;
 
+std::function<std::unique_ptr<Level>(int)> Levels::levelMakers[] = {
+    makeStatic,
+    makeColinear,
+    makeLinearScatter
+};
+
 std::vector<Dancer::Type> generateTypeVector(Dancer::Type targetType)
 {
     static std::vector<Dancer::Type> randomTypes = { Dancer::Type::BAUTA, Dancer::Type::COLOMBINA, Dancer::Type::GATTO, Dancer::Type::JESTER, Dancer::Type::MEDICO, Dancer::Type::VOLTO };
 
-    randomTypes.erase(std::find(randomTypes.begin(), randomTypes.end(), targetType));
+    std::vector types = randomTypes;
+    types.erase(std::find(randomTypes.begin(), randomTypes.end(), targetType));
 
-    return randomTypes;
+    return types;
 }
 
 Dancer::Type Levels::_getRandomType()
@@ -122,13 +129,19 @@ std::unique_ptr<Level> Levels::makeLine()
     return std::move(level);
 }
 
-std::unique_ptr<Level> Levels::makeStatic(int gridSize, int numberOfDancers)
+std::unique_ptr<Level> Levels::makeStatic(int difficulty)
 {
     auto level = std::make_unique<Level>();
     
-    std::vector<LeoEngine::Pair<double, double>> availableGridSpaces = generateGrid(gridSize);
+    std::vector<LeoEngine::Pair<double, double>> availableGridSpaces = generateGrid(16);
 
     // choose grid spaces randomly for dancers; pop
+    int numberOfDancers = 10 + 2*difficulty;
+    if (numberOfDancers > 256)
+    {
+        numberOfDancers = 256;
+    }
+
     for (int i = 0; i < numberOfDancers; i++)
     {
         int chosenGridSlotIndex = _rng.getNextNumber(0, availableGridSpaces.size()-1);
@@ -142,10 +155,10 @@ std::unique_ptr<Level> Levels::makeStatic(int gridSize, int numberOfDancers)
     level->setTarget(_rng.getNextNumber(0, level->getDancers().size()-1));
     level->setTargetType(targetType);
 
-    return level;
+    return std::move(level);
 }
 
-std::unique_ptr<Level> Levels::makeColinear(int numberOfDancers)
+std::unique_ptr<Level> Levels::makeColinear(int difficulty)
 {
     auto level = std::make_unique<Level>();
 
@@ -153,6 +166,12 @@ std::unique_ptr<Level> Levels::makeColinear(int numberOfDancers)
     double slope = tan(angle);
 
     std::vector<LeoEngine::Pair<double, double>> availableGridPositions = generateGrid(16);
+
+    int numberOfDancers = 8 + 2*difficulty;
+    if (numberOfDancers > 256)
+    {
+        numberOfDancers = 256;
+    }
 
     for (int i = 0; i < numberOfDancers; i++)
     {
@@ -168,14 +187,20 @@ std::unique_ptr<Level> Levels::makeColinear(int numberOfDancers)
     level->setTarget(_rng.getNextNumber(0, level->getDancers().size()-1));
     level->setTargetType(targetType);
 
-    return level;
+    return std::move(level);
 }
 
-std::unique_ptr<Level> Levels::makeLinearScatter(int numberOfDancers)
+std::unique_ptr<Level> Levels::makeLinearScatter(int difficulty)
 {
     auto level = std::make_unique<Level>();
 
     std::vector<LeoEngine::Pair<double, double>> availableGridPositions = generateGrid(16);
+
+    int numberOfDancers = 8 + 2*difficulty;
+    if (numberOfDancers > 256)
+    {
+        numberOfDancers = 256;
+    }
 
     for (int i = 0; i < numberOfDancers; i++)
     {
@@ -194,7 +219,7 @@ std::unique_ptr<Level> Levels::makeLinearScatter(int numberOfDancers)
     level->setTarget(_rng.getNextNumber(0, level->getDancers().size()-1));
     level->setTargetType(targetType);
 
-    return level;
+    return std::move(level);
 }
 
 /*

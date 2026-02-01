@@ -46,9 +46,9 @@ public:
     static constexpr int NUMBER_OF_IDLE_ANIMATION_FRAMES = 2;
     static constexpr double IDLE_ANIMATION_FRAME_DISPLAY_LENGTH = 60/((110.0/3.0)*2.0);
     static constexpr int NUMBER_OF_VICTORY_ANIMATION_FRAMES = 6;
-    static constexpr double VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH = 0.5;
+    static constexpr double VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH = 0.3;
     static constexpr int NUMBER_OF_FAILURE_ANIMATION_FRAMES = 6;
-    static constexpr double FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH = 0.5;
+    static constexpr double FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH = 0.3;
 
 private:
     Type _type;

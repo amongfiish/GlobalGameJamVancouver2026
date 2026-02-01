@@ -1,7 +1,10 @@
+#include "LeoEngine/RandomNumberGenerator.hpp"
 #include "GameState.hpp"
+#include "Levels.hpp"
 
 std::unique_ptr<Level> GameState::_currentLevel(nullptr);
 double GameState::_timer = 0.0;
+int GameState::_level = 0;
 
 void GameState::setCurrentLevel(std::unique_ptr<Level> level)
 {
@@ -26,5 +29,19 @@ void GameState::addTime(double deltaTime)
 double GameState::getTime()
 {
     return _timer;
+}
+
+void GameState::nextLevel()
+{
+    static LeoEngine::RandomNumberGenerator _rng;
+
+    _level++;
+
+    _currentLevel = Levels::levelMakers[_rng.getNextNumber(0, Levels::NUMBER_OF_LEVEL_MAKERS-1)](_level);
+}
+
+int GameState::getLevel()
+{
+    return _level;
 }
 

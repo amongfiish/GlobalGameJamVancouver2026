@@ -15,6 +15,9 @@ public:
     static void addTime(double deltaTime);
     static double getTime();
 
+    static void nextLevel();
+    static int getLevel();
+
 private:
     static constexpr double _INITIAL_TIMER = 14.0;
 
@@ -22,6 +25,9 @@ private:
 
     // how long does the player have left?
     static double _timer;
+
+    // how many levels have been cleared?
+    static int _level;
 };
 
 #endif

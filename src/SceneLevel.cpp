@@ -18,6 +18,8 @@ SceneLevel::SceneLevel()
     _sidebarBackgroundSprite.setPosition(Level::BACKGROUND_WIDTH, 0);
     _sidebarBackgroundSprite.setSize(128, Level::BACKGROUND_HEIGHT);
 
+    _gameOverAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 3, 1.0);
+
     _initializeTimerTextBox();     
 }
 
@@ -90,6 +92,14 @@ void SceneLevel::_handleVictory()
     GameState::addTime(VICTORY_DELTA_TIME);
     _updateTimerText();
 
+    _unmaskAnimationElapsedTime = 0.0;
+    //_animationSprite.setAnimation(Dancer::VICTORY_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
+    //_animationSprite.setLoop(false);
+    //_animationSprite.setCurrentFrame(0);
+    LeoEngine::Pair<int, int> targetPosition = _level->getTarget()->getAbsolutePosition();
+    //_animationSprite.getSprite().setPosition(targetPosition.first, targetPosition.second);
+    //_animationSprite.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
+
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
 }
 
@@ -102,7 +112,8 @@ void SceneLevel::_updateRunning(double deltaTime)
 {
     static constexpr double BPM_TIMER_MULTIPLIER = ((110.0/3.0)*2.0)/60;
 
-    GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER);
+    double speedMultiplier = 1.0 * pow(1.01, GameState::getLevel());
+    GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER * speedMultiplier);
     int time = GameState::getTime();
     if (time <= 0)
     {
@@ -127,6 +138,7 @@ void SceneLevel::_updateRunning(double deltaTime)
         }
     }
 
+    _level->setSpeedMultiplier(speedMultiplier);
     _level->update(deltaTime);
 }
 
@@ -137,7 +149,17 @@ void SceneLevel::_updateGameOver(double deltaTime)
 
 void SceneLevel::_updateVictory(double deltaTime)
 {
+    //_animationSprite.update(deltaTime);
 
+    _unmaskAnimationElapsedTime += deltaTime;
+    if (_unmaskAnimationElapsedTime >= _UNMASK_DURATION)
+    {
+        // set next level
+        GameState::nextLevel();
+        _state = State::RUNNING;
+        //_animationSprite.setAnimation(nullptr);
+        onActivate();
+    }
 }
 
 void SceneLevel::_drawRunning()
@@ -155,7 +177,7 @@ void SceneLevel::_drawGameOver()
 
 void SceneLevel::_drawVictory()
 {
-    _level->getTarget()->draw();
+    //_animationSprite.draw();
 }
 
 void SceneLevel::_initializeTimerTextBox()

@@ -1,10 +1,12 @@
 #ifndef SCENE_LEVEL_HPP
 #define SCENE_LEVEL_HPP
 
+#include <memory>
 #include "LeoEngine/Scene.hpp"
 #include "LeoEngine/Sound.hpp"
 #include "LeoEngine/UIText.hpp"
 #include "LeoEngine/SpriteStatic.hpp"
+#include "LeoEngine/SpriteAnimated.hpp"
 #include "Level.hpp"
 
 class SceneLevel : public LeoEngine::Scene
@@ -30,6 +32,10 @@ public:
     static constexpr double FAILURE_DELTA_TIME = -10.0;
 
 private:
+    std::shared_ptr<LeoEngine::Animation> _gameOverAnimation;
+    
+    //LeoEngine::SpriteAnimated _animationSprite;
+
     // when the timer runs out
     void _handleGameOver();
     // when the player clicks the right character
@@ -57,6 +63,10 @@ private:
     
     LeoEngine::Sound* _backgroundMusic;
     int _musicTrackID;
+
+    // game over/victory
+    static constexpr double _UNMASK_DURATION = 2.8;
+    double _unmaskAnimationElapsedTime;
 };
 
 #endif
