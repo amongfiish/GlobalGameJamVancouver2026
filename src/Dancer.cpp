@@ -4,13 +4,31 @@
 #include "Dancer.hpp"
 #include "Level.hpp"
 
-const std::shared_ptr<LeoEngine::Animation> Dancer::_ANIMATIONS[] = {
-    LeoEngine::createAnimationFromStripData("bauta.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH),
-    LeoEngine::createAnimationFromStripData("colombina.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH),
-    LeoEngine::createAnimationFromStripData("gatto.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH),
-    LeoEngine::createAnimationFromStripData("jester.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH),
-    LeoEngine::createAnimationFromStripData("medico.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH),
-    LeoEngine::createAnimationFromStripData("volto.png", SIZE, SIZE, _NUMBER_OF_ANIMATION_FRAMES, _ANIMATION_FRAME_DISPLAY_LENGTH)
+const std::shared_ptr<LeoEngine::Animation> Dancer::IDLE_ANIMATIONS[] = {
+    LeoEngine::createAnimationFromStripData("bauta.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("colombina.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("gatto.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("jester.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("medico.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("volto.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH)
+};
+
+const std::shared_ptr<LeoEngine::Animation> Dancer::VICTORY_ANIMATIONS[] = {
+    LeoEngine::createAnimationFromStripData("bauta_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("colombina_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("gatto_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("jester_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("medico_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("volto_unmask_victory.png", SIZE, SIZE, NUMBER_OF_VICTORY_ANIMATION_FRAMES, VICTORY_ANIMATION_FRAME_DISPLAY_LENGTH)
+};
+
+const std::shared_ptr<LeoEngine::Animation> Dancer::FAILURE_ANIMATIONS[] = {
+    LeoEngine::createAnimationFromStripData("bauta_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("colombina_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("gatto_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("jester_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("medico_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH),
+    LeoEngine::createAnimationFromStripData("volto_unmask_failure.png", SIZE, SIZE, NUMBER_OF_FAILURE_ANIMATION_FRAMES, FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH)
 };
 
 Dancer::Dancer(std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> origin, LeoEngine::Pair<double, double> scale, double initialTime, double speed)
@@ -22,7 +40,7 @@ Dancer::Dancer(std::function<LeoEngine::Pair<double, double>(double)>* positionF
       _speed(speed),
       _levelSpeedMultiplier(1.0)
 {
-    _sprite.setAnimation(_ANIMATIONS[static_cast<int>(_type)]);
+    _sprite.setAnimation(IDLE_ANIMATIONS[static_cast<int>(_type)]);
     _sprite.getSprite().setSize(SIZE, SIZE);
 }
 
@@ -97,9 +115,14 @@ void Dancer::setLevelSpeedMultiplier(double multiplier)
     _levelSpeedMultiplier = multiplier;
 }
 
+Dancer::Type Dancer::getType() const
+{
+    return _type;
+}
+
 void Dancer::setType(Type type)
 {
     _type = type;
-    _sprite.setAnimation(_ANIMATIONS[static_cast<int>(type)]);
+    _sprite.setAnimation(IDLE_ANIMATIONS[static_cast<int>(type)]);
 }
 

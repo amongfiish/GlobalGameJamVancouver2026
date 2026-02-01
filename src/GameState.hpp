@@ -16,7 +16,7 @@ public:
     static double getTime();
 
 private:
-    static constexpr double _INITIAL_TIMER = 10.0;
+    static constexpr double _INITIAL_TIMER = 14.0;
 
     static std::unique_ptr<Level> _currentLevel;
 
