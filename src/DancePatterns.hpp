@@ -15,6 +15,7 @@ public:
     static DancePattern linear;
     static DancePattern circle; 
     static DancePattern flower;
+    static DancePattern kikibouba;
 };
 
 #endif

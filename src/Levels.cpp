@@ -7,11 +7,12 @@
 LeoEngine::RandomNumberGenerator Levels::_rng;
 
 std::function<std::unique_ptr<Level>(int)> Levels::levelMakers[] = {
-//    makeStatic,
- //   makeColinear,
-  //  makeLinearScatter,
-    //makeCircle,
-    makeFlower
+    makeStatic,
+    makeColinear,
+    makeLinearScatter,
+    makeCircle,
+    makeFlower,
+    makeKikibouba
 };
 
 std::vector<Dancer::Type> generateTypeVector(Dancer::Type targetType)
@@ -266,6 +267,32 @@ std::unique_ptr<Level> Levels::makeFlower(int difficulty)
     {
         double angle = i*(M_PI*2/numberOfDancers);
         level->addDancer(Dancer(&DancePatterns::flower, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.8*(reverse?-1:1), 0.8), angle, 0.1));
+    }
+
+    Dancer::Type targetType = _getRandomType();
+    level->randomizeDancerTypes(generateTypeVector(targetType));
+    level->setTarget(_rng.getNextNumber(0, level->getDancers().size()-1));
+    level->setTargetType(targetType);
+
+    return std::move(level);
+}
+
+std::unique_ptr<Level> Levels::makeKikibouba(int difficulty)
+{
+    auto level = std::make_unique<Level>();
+
+    int numberOfDancers = 8 + 2*difficulty;
+    if (numberOfDancers > 48)
+    {
+        numberOfDancers = 48;
+    }
+
+    bool reverse = static_cast<bool>(_rng.getNextNumber(0,1));
+
+    for (int i = 0; i < numberOfDancers; i++)
+    {
+        double angle = i*(M_PI*2/numberOfDancers);
+        level->addDancer(Dancer(&DancePatterns::kikibouba, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.7*(reverse?-1:1), 0.7), angle, 0.6));
     }
 
     Dancer::Type targetType = _getRandomType();

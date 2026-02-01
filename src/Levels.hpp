@@ -11,7 +11,7 @@ class Levels
 public:
     Levels() = delete;
     
-    static constexpr int NUMBER_OF_LEVEL_MAKERS = 1;
+    static constexpr int NUMBER_OF_LEVEL_MAKERS = 6;
     static std::function<std::unique_ptr<Level>(int)> levelMakers[NUMBER_OF_LEVEL_MAKERS];
 
     static std::unique_ptr<Level> makeTest();
@@ -23,6 +23,7 @@ public:
     static std::unique_ptr<Level> makeLinearScatter(int difficulty);
     static std::unique_ptr<Level> makeCircle(int difficulty);
     static std::unique_ptr<Level> makeFlower(int difficulty);
+    static std::unique_ptr<Level> makeKikibouba(int difficulty);
 
 private:
     static Dancer::Type _getRandomType();
