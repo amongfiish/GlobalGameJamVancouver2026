@@ -4,6 +4,8 @@
 #include "Dancer.hpp"
 #include "Level.hpp"
 
+LeoEngine::Texture& Dancer::_shadowTexture = LeoEngine::Services::get().getGraphics()->getTexture("shadow.png");
+
 const std::shared_ptr<LeoEngine::Animation> Dancer::IDLE_ANIMATIONS[] = {
     LeoEngine::createAnimationFromStripData("bauta.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
     LeoEngine::createAnimationFromStripData("colombina.png", SIZE, SIZE, NUMBER_OF_IDLE_ANIMATION_FRAMES, IDLE_ANIMATION_FRAME_DISPLAY_LENGTH),
@@ -97,6 +99,11 @@ void Dancer::update(double deltaTime)
 void Dancer::draw()
 {
     _sprite.draw();
+    LeoEngine::Pair<int, int> adjustedPosition = _absolutePosition;
+    adjustedPosition.second += _SHADOW_PIXEL_OFFSET_Y;
+
+    LeoEngine::TextureDrawData shadowDrawData(nullptr, std::make_shared<LeoEngine::Rectangle<int>>(adjustedPosition, _shadowTexture.getDimensions()), 0.0, nullptr, LeoEngine::FlipType::NONE);
+    LeoEngine::Services::get().getGraphics()->drawTexture(_shadowTexture, shadowDrawData);
 }
 
 void Dancer::reset()

@@ -51,6 +51,9 @@ public:
     static constexpr double FAILURE_ANIMATION_FRAME_DISPLAY_LENGTH = 0.3;
 
 private:
+    static LeoEngine::Texture& _shadowTexture;
+    static constexpr int _SHADOW_PIXEL_OFFSET_Y = 3;
+
     Type _type;
 
     double _elapsedTime;
