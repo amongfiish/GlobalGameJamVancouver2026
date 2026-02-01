@@ -219,7 +219,7 @@ void SceneLevel::_initializeTimerTextBox()
     static constexpr int ORIGIN_Y = 82;
     static constexpr int TEXT_SIZE = 20;
     static const std::string FONT_FILENAME = "FreeSerif.ttf";
-    static const LeoEngine::Colour TEXT_COLOUR(0xff, 0xff, 0xff, 0xff);
+    static const LeoEngine::Colour TEXT_COLOUR(0xcd, 0xb0, 0x86, 0xff);
 
     _timerTextBox.setFontFilename(FONT_FILENAME);
     _timerTextBox.setText("00");
