@@ -48,10 +48,25 @@ void SceneLevel::update(double deltaTime)
         _updateVictory(deltaTime);
         break;
     }
+
+    for (auto it = _notifications.begin(); it != _notifications.end();)
+    {
+        if (it->update(deltaTime))
+        {
+            it = _notifications.erase(it);
+        }
+        else
+        {
+            it++;
+        }
+    }
 }
 
 void SceneLevel::draw()
 {
+    static LeoEngine::Colour backgroundColour(0x30, 0x11, 0x2f, 0xff);
+    LeoEngine::Services::get().getGraphics()->drawRectangle(backgroundColour, true, Level::BACKGROUND_START_X, Level::BACKGROUND_START_Y, Level::BACKGROUND_WIDTH, Level::BACKGROUND_HEIGHT);
+
     switch (_state)
     {
     case State::RUNNING:
@@ -69,6 +84,11 @@ void SceneLevel::draw()
     _levelCountTextBox.draw();
     _timerTextBox.draw();
     _targetPortrait.draw();
+
+    for (auto& notification : _notifications)
+    {
+        notification.draw();
+    }
 }
 
 void SceneLevel::onActivate()
@@ -90,6 +110,11 @@ void SceneLevel::onDeactivate()
     _level = nullptr;
 
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
+}
+
+void SceneLevel::fireNotification(const LeoEngine::Pair<double, double>& initialPosition, std::string text)
+{
+    _notifications.emplace_back(initialPosition, text);
 }
 
 void SceneLevel::_handleGameOver()
@@ -114,6 +139,7 @@ void SceneLevel::_handleVictory()
     _updateTimerText();
 
     _unmaskAnimationElapsedTime = 0.0;
+    _unmaskAnimationElapsedTime = 0.0;
     _animationSprite.setAnimation(Dancer::VICTORY_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
     _animationSprite.setLoop(false);
     _animationSprite.setCurrentFrame(0);
@@ -121,12 +147,15 @@ void SceneLevel::_handleVictory()
     _animationSprite.getSprite().setPosition(targetPosition.first, targetPosition.second);
     _animationSprite.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
 
-    LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
+    //LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
+    LeoEngine::Services::get().getAudio()->playOneShot("victory.wav");
 }
 
 void SceneLevel::_handleFailure()
 {
     GameState::addTime(FAILURE_DELTA_TIME);
+    
+    LeoEngine::Services::get().getAudio()->playOneShot("failure.wav");
 }
 
 void SceneLevel::_updateRunning(double deltaTime)
@@ -149,13 +178,17 @@ void SceneLevel::_updateRunning(double deltaTime)
         const LeoEngine::Pair<int, int>& clickPosition = LeoEngine::Services::get().getInput()->getMousePosition();
         LeoEngine::Rectangle<int> targetBounds = _level->getTargetBounds();
 
+        LeoEngine::Pair<double, double> doubleClickPosition(static_cast<double>(clickPosition.first), static_cast<double>(clickPosition.second));
+
         if (LeoEngine::checkForOverlap(clickPosition, targetBounds))
         {
             _handleVictory();
+            fireNotification(doubleClickPosition, "+5");
         }
         else
         {
             _handleFailure();
+            fireNotification(doubleClickPosition, "-10");
         }
     }
 
@@ -173,6 +206,16 @@ void SceneLevel::_updateVictory(double deltaTime)
     _animationSprite.update(deltaTime);
 
     _unmaskAnimationElapsedTime += deltaTime;
+    if (_unmaskSFXTimer >= _UNMASK_SFX_DELAY)
+    {
+        _unmaskSFXTimer = -1;
+        LeoEngine::Services::get().getAudio()->playOneShot("unmasking.wav");
+    }
+    else if (_unmaskSFXTimer >= 0)
+    {
+        _unmaskSFXTimer += deltaTime;
+    }
+
     if (_unmaskAnimationElapsedTime >= _UNMASK_DURATION)
     {
         // set next level
@@ -182,7 +225,6 @@ void SceneLevel::_updateVictory(double deltaTime)
 
         _level = GameState::getCurrentLevel();
         _level->reset();
-        LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
 
         _targetPortrait.setAnimation(Dancer::IDLE_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
 
@@ -207,9 +249,6 @@ void SceneLevel::_drawGameOver()
 
 void SceneLevel::_drawVictory()
 {
-    static LeoEngine::Colour backgroundColour(0x30, 0x11, 0x2f, 0xff);
-
-    LeoEngine::Services::get().getGraphics()->fill(backgroundColour);
     _animationSprite.draw();
 }
 
