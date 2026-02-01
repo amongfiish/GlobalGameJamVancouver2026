@@ -14,6 +14,7 @@ public:
     static DancePattern still;
     static DancePattern linear;
     static DancePattern circle; 
+    static DancePattern flower;
 };
 
 #endif

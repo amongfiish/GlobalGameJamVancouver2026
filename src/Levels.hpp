@@ -22,6 +22,7 @@ public:
     static std::unique_ptr<Level> makeColinear(int difficulty);
     static std::unique_ptr<Level> makeLinearScatter(int difficulty);
     static std::unique_ptr<Level> makeCircle(int difficulty);
+    static std::unique_ptr<Level> makeFlower(int difficulty);
 
 private:
     static Dancer::Type _getRandomType();
