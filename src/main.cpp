@@ -25,7 +25,7 @@ int main(int argc, char* argv[])
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();
     int testSceneID = gameSceneCollection.addScene<SceneLevel>();
 
-    GameState::setCurrentLevel(Levels::makeColinear(256));
+    GameState::setCurrentLevel(Levels::makeLinearScatter(64));
     GameState::getCurrentLevel()->setSpeedMultiplier(0.5);
 
     gameSceneCollection.setCurrentScene(testSceneID);

@@ -157,9 +157,36 @@ std::unique_ptr<Level> Levels::makeColinear(int numberOfDancers)
     for (int i = 0; i < numberOfDancers; i++)
     {
         bool movingForwards = static_cast<bool>(_rng.getNextNumber(0,1));
+        bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
 
         int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
-        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))),slope/(sqrt(1+pow(slope,2)))), 0.0, movingForwards ? 1 : -1));
+        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))) * (mirror?-1:1),slope/(sqrt(1+pow(slope,2))) * (movingForwards?1:-1)), 0.0, 1.0));
+    }
+
+    Dancer::Type targetType = _getRandomType();
+    level->randomizeDancerTypes(generateTypeVector(targetType));
+    level->setTarget(_rng.getNextNumber(0, level->getDancers().size()-1));
+    level->setTargetType(targetType);
+
+    return level;
+}
+
+std::unique_ptr<Level> Levels::makeLinearScatter(int numberOfDancers)
+{
+    auto level = std::make_unique<Level>();
+
+    std::vector<LeoEngine::Pair<double, double>> availableGridPositions = generateGrid(16);
+
+    for (int i = 0; i < numberOfDancers; i++)
+    {
+        double angle = _rng.getNextNumber(0, 999) / 999.0 * M_PI;
+        double slope = tan(angle);
+
+        bool movingForwards = static_cast<bool>(_rng.getNextNumber(0,1));
+        bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
+
+        int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
+        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1.0/(sqrt(1+pow(slope,2))) * (mirror ? -1.0 : 1.0),slope/(sqrt(1+pow(slope,2))) * (movingForwards ? 1.0 : -1.0)), 0.0, 1.0));
     }
 
     Dancer::Type targetType = _getRandomType();

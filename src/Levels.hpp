@@ -15,6 +15,7 @@ public:
     static std::unique_ptr<Level> makeLine();
     static std::unique_ptr<Level> makeStatic(int gridSize, int numberOfDancers);
     static std::unique_ptr<Level> makeColinear(int numberOfDancers);
+    static std::unique_ptr<Level> makeLinearScatter(int numberOfDancers);
     //static Level* makeCircle();
     //static Level makeStatic(int difficulty);
 
