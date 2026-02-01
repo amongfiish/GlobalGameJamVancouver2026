@@ -13,11 +13,11 @@ public:
     enum class Type
     {
         BAUTA=0,
-        COLOMBINA,
-        GATTO,
-        JESTER,
-        MEDICO,
-        VOLTO 
+        COLOMBINA=1,
+        GATTO=2,
+        JESTER=3,
+        MEDICO=4,
+        VOLTO=5 
     };
 
     Dancer(std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);

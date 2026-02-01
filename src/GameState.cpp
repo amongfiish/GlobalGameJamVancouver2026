@@ -2,18 +2,18 @@
 #include "GameState.hpp"
 #include "Levels.hpp"
 
-std::unique_ptr<Level> GameState::_currentLevel(nullptr);
+std::shared_ptr<Level> GameState::_currentLevel(nullptr);
 double GameState::_timer = 0.0;
 int GameState::_level = 0;
 
-void GameState::setCurrentLevel(std::unique_ptr<Level> level)
+void GameState::setCurrentLevel(std::shared_ptr<Level> level)
 {
     _currentLevel = std::move(level);
 }
 
-Level* GameState::getCurrentLevel()
+std::shared_ptr<Level> GameState::getCurrentLevel()
 {
-    return _currentLevel.get();
+    return _currentLevel;
 }
 
 void GameState::resetTime()

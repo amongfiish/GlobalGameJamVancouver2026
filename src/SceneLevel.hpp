@@ -59,7 +59,7 @@ private:
 
     LeoEngine::SpriteStatic _sidebarBackgroundSprite;
 
-    Level* _level;
+    std::shared_ptr<Level> _level;
     
     LeoEngine::Sound* _backgroundMusic;
     int _musicTrackID;

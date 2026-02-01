@@ -14,10 +14,10 @@ std::function<std::unique_ptr<Level>(int)> Levels::levelMakers[] = {
 
 std::vector<Dancer::Type> generateTypeVector(Dancer::Type targetType)
 {
-    static std::vector<Dancer::Type> randomTypes = { Dancer::Type::BAUTA, Dancer::Type::COLOMBINA, Dancer::Type::GATTO, Dancer::Type::JESTER, Dancer::Type::MEDICO, Dancer::Type::VOLTO };
+    static const std::vector<Dancer::Type> randomTypes = { Dancer::Type::BAUTA, Dancer::Type::COLOMBINA, Dancer::Type::GATTO, Dancer::Type::JESTER, Dancer::Type::MEDICO, Dancer::Type::VOLTO };
 
     std::vector types = randomTypes;
-    types.erase(std::find(randomTypes.begin(), randomTypes.end(), targetType));
+    types.erase(std::find(types.begin(), types.end(), targetType));
 
     return types;
 }
