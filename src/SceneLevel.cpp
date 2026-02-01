@@ -6,6 +6,7 @@
 #include "LeoEngine/Colour.hpp"
 #include "SceneLevel.hpp"
 #include "GameState.hpp"
+#include "numeris_romanis.hpp"
 
 SceneLevel::SceneLevel()
     : _level(nullptr),
@@ -25,6 +26,7 @@ SceneLevel::SceneLevel()
     _gameOverAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 3, 1.0);
 
     _initializeTimerTextBox();     
+    _initializeLevelCountTextBox();
 }
 
 SceneLevel::~SceneLevel()
@@ -64,8 +66,8 @@ void SceneLevel::draw()
     }
 
     _sidebarBackgroundSprite.draw();
+    _levelCountTextBox.draw();
     _timerTextBox.draw();
-
     _targetPortrait.draw();
 }
 
@@ -79,6 +81,8 @@ void SceneLevel::onActivate()
     GameState::resetTime();
 
     LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
+
+    _updateLevelCountText();
 }
 
 void SceneLevel::onDeactivate()
@@ -174,6 +178,8 @@ void SceneLevel::_updateVictory(double deltaTime)
         LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
 
         _targetPortrait.setAnimation(Dancer::IDLE_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
+
+        _updateLevelCountText();
     }
 }
 
@@ -181,8 +187,10 @@ void SceneLevel::_drawRunning()
 {
     _level->draw();
 
+    /*
     LeoEngine::Rectangle<int> targetBounds = _level->getTargetBounds();
     LeoEngine::Services::get().getGraphics()->drawRectangle(LeoEngine::Colour(0xff, 0xff, 0xff, 0xff), false, targetBounds);
+    */
 }
 
 void SceneLevel::_drawGameOver()
@@ -217,5 +225,35 @@ void SceneLevel::_initializeTimerTextBox()
 void SceneLevel::_updateTimerText()
 {
     _timerTextBox.setText(std::to_string(static_cast<int>(GameState::getTime())));
+}
+
+void SceneLevel::_initializeLevelCountTextBox()
+{
+    static constexpr int ORIGIN_X = Level::BACKGROUND_WIDTH + 64;
+    static constexpr int ORIGIN_Y = 10;
+    static constexpr int TEXT_SIZE = 12;
+    static const std::string FONT_FILENAME = "FreeSerif.ttf";
+    static const LeoEngine::Colour TEXT_COLOUR(0x00, 0x00, 0x00, 0xff);
+
+    _levelCountTextBox.setFontFilename(FONT_FILENAME);
+    _levelCountTextBox.setText("tutorial");
+    _levelCountTextBox.setTextSize(TEXT_SIZE);
+    _levelCountTextBox.setTextColour(TEXT_COLOUR);
+    _levelCountTextBox.setOrigin(LeoEngine::UIAnchor::TOP_MIDDLE);
+    _levelCountTextBox.setPosition(ORIGIN_X, ORIGIN_Y);
+}
+
+void SceneLevel::_updateLevelCountText()
+{
+    int level = GameState::getLevel();
+
+    if (level == 0)
+    {
+        _levelCountTextBox.setText("tutorial");
+    }
+    else
+    {
+        _levelCountTextBox.setText(rom::numerus(static_cast<long long unsigned int>(level)).ad_filum());
+    }
 }
 

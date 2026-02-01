@@ -32,7 +32,6 @@ public:
     static constexpr double FAILURE_DELTA_TIME = -10.0;
 
 private:
-
     static constexpr int _TARGET_PORTRAIT_X = 304;
     static constexpr int _TARGET_PORTRAIT_Y = 158;
 
@@ -61,6 +60,10 @@ private:
     LeoEngine::UIText _timerTextBox;
     void _initializeTimerTextBox();
     void _updateTimerText();
+
+    LeoEngine::UIText _levelCountTextBox;
+    void _initializeLevelCountTextBox();
+    void _updateLevelCountText();
 
     LeoEngine::SpriteStatic _sidebarBackgroundSprite;
 
