@@ -182,7 +182,7 @@ std::unique_ptr<Level> Levels::makeColinear(int difficulty)
         bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
 
         int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
-        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))) * (mirror?-1:1),slope/(sqrt(1+pow(slope,2))) * (movingForwards?1:-1)), 0.0, 1.0));
+        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))) * (mirror?-1:1),slope/(sqrt(1+pow(slope,2))) * (movingForwards?1:-1)), 0.0, 0.6));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -214,7 +214,7 @@ std::unique_ptr<Level> Levels::makeLinearScatter(int difficulty)
         bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
 
         int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
-        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1.0/(sqrt(1+pow(slope,2))) * (mirror ? -1.0 : 1.0),slope/(sqrt(1+pow(slope,2))) * (movingForwards ? 1.0 : -1.0)), 0.0, 1.0));
+        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1.0/(sqrt(1+pow(slope,2))) * (mirror ? -1.0 : 1.0),slope/(sqrt(1+pow(slope,2))) * (movingForwards ? 1.0 : -1.0)), 0.0, 0.6));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -240,7 +240,7 @@ std::unique_ptr<Level> Levels::makeCircle(int difficulty)
     for (int i = 0; i < numberOfDancers; i++)
     {
         double angle = i*(M_PI*2/numberOfDancers);
-        level->addDancer(Dancer(&DancePatterns::circle, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.8*(reverse?-1:1), 0.8), angle, 1.0));
+        level->addDancer(Dancer(&DancePatterns::circle, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.8*(reverse?-1:1), 0.8), angle, 0.8));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -266,7 +266,7 @@ std::unique_ptr<Level> Levels::makeFlower(int difficulty)
     for (int i = 0; i < numberOfDancers; i++)
     {
         double angle = i*(M_PI*2/numberOfDancers);
-        level->addDancer(Dancer(&DancePatterns::flower, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.8*(reverse?-1:1), 0.8), angle, 0.1));
+        level->addDancer(Dancer(&DancePatterns::flower, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.8*(reverse?-1:1), 0.8), angle, 0.075));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -292,7 +292,7 @@ std::unique_ptr<Level> Levels::makeKikibouba(int difficulty)
     for (int i = 0; i < numberOfDancers; i++)
     {
         double angle = i*(M_PI*2/numberOfDancers);
-        level->addDancer(Dancer(&DancePatterns::kikibouba, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.7*(reverse?-1:1), 0.7), angle, 0.6));
+        level->addDancer(Dancer(&DancePatterns::kikibouba, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.7*(reverse?-1:1), 0.7), angle, 0.3));
     }
 
     Dancer::Type targetType = _getRandomType();

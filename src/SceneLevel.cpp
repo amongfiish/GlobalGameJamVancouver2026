@@ -25,6 +25,9 @@ SceneLevel::SceneLevel()
     _targetPortrait.getSprite().setPosition(_TARGET_PORTRAIT_X, _TARGET_PORTRAIT_Y);
     _targetPortrait.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
 
+    _cursorSprite.setTextureFilename("cursor.png");
+    _cursorSprite.setSize(_CURSOR_SIZE, _CURSOR_SIZE);
+
     _gameOverAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 3, 1.0);
 
     _initializeTimerTextBox();     
@@ -62,6 +65,9 @@ void SceneLevel::update(double deltaTime)
             it++;
         }
     }
+
+    const LeoEngine::Pair<int, int>& mousePosition = LeoEngine::Services::get().getInput()->getMousePosition();
+    _cursorSprite.setPosition(mousePosition.first - _CURSOR_SIZE/2, mousePosition.second - _CURSOR_SIZE/2);
 }
 
 void SceneLevel::draw()
@@ -91,6 +97,8 @@ void SceneLevel::draw()
     {
         notification.draw();
     }
+
+    _cursorSprite.draw();
 }
 
 void SceneLevel::onActivate()
@@ -165,7 +173,7 @@ void SceneLevel::_updateRunning(double deltaTime)
 {
     static constexpr double BPM_TIMER_MULTIPLIER = ((110.0/3.0)*2.0)/60;
 
-    double speedMultiplier = 1.0 * pow(1.01, GameState::getLevel());
+    double speedMultiplier = 1.0 * pow(1.02, GameState::getLevel());
     GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER * speedMultiplier);
     int time = GameState::getTime();
     if (time <= 0)
@@ -186,12 +194,12 @@ void SceneLevel::_updateRunning(double deltaTime)
         if (LeoEngine::checkForOverlap(clickPosition, targetBounds))
         {
             _handleVictory();
-            fireNotification(doubleClickPosition, "+5");
+            fireNotification(doubleClickPosition, "+" + std::to_string(VICTORY_DELTA_TIME));
         }
         else
         {
             _handleFailure();
-            fireNotification(doubleClickPosition, "-10");
+            fireNotification(doubleClickPosition, "-" + std::to_string(FAILURE_DELTA_TIME));
         }
     }
 
