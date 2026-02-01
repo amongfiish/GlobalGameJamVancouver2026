@@ -37,15 +37,9 @@ public:
     static constexpr int DANCE_FLOOR_WIDTH = 256;
     static constexpr int DANCE_FLOOR_HEIGHT = 208;
 
-    static constexpr double SUCCESS_DELTA_TIME = 5.0;
-    static constexpr double FAILURE_DELTA_TIME = -10.0;
-
 private:
     static LeoEngine::SpriteStatic _backgroundSprite;
     static LeoEngine::SpriteStatic _makeBackgroundSprite();
-
-    LeoEngine::UIText _timerTextBox;
-    void _initializeTimerTextBox();
 
     std::vector<Dancer> _dancers;
     int _target;

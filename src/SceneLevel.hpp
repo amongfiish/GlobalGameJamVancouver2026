@@ -3,12 +3,20 @@
 
 #include "LeoEngine/Scene.hpp"
 #include "LeoEngine/Sound.hpp"
+#include "LeoEngine/UIText.hpp"
 
 class Level;
 
 class SceneLevel : public LeoEngine::Scene
 {
 public:
+    enum class State 
+    {
+        RUNNING,
+        GAME_OVER,
+        VICTORY 
+    };
+
     SceneLevel();
     virtual ~SceneLevel();
 
@@ -18,7 +26,31 @@ public:
     virtual void onActivate() override;
     virtual void onDeactivate() override;
 
+    static constexpr double VICTORY_DELTA_TIME = 5.0;
+    static constexpr double FAILURE_DELTA_TIME = -10.0;
+
 private:
+    // when the timer runs out
+    void _handleGameOver();
+    // when the player clicks the right character
+    void _handleVictory();
+    // when the player clicks the wrong character
+    void _handleFailure();
+
+    void _updateRunning(double deltaTime);
+    void _updateGameOver(double deltaTime);
+    void _updateVictory(double deltaTime);
+
+    void _drawRunning();
+    void _drawGameOver();
+    void _drawVictory();
+
+    State _state;
+
+    LeoEngine::UIText _timerTextBox;
+    void _initializeTimerTextBox();
+    void _updateTimerText();
+
     Level* _level;
     
     LeoEngine::Sound* _backgroundMusic;

@@ -1,3 +1,4 @@
+#include <cmath>
 #include "DancePatterns.hpp"
 
 DancePatterns::DancePattern DancePatterns::still = [](double t){ return LeoEngine::Pair<double, double>(0, 0); };

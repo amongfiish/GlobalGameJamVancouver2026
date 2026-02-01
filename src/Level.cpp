@@ -6,12 +6,11 @@
 
 LeoEngine::SpriteStatic Level::_backgroundSprite = _makeBackgroundSprite();
 
-
 Level::Level()
     : _targetType(static_cast<Dancer::Type>(0)),
       _speedMultiplier(1.0)
 {
-    _initializeTimerTextBox();     
+
 }
 
 Level::~Level()
@@ -21,16 +20,11 @@ Level::~Level()
 
 void Level::update(double deltaTime)
 {
-    static constexpr double BPM_TIMER_MULTIPLIER = ((110.0/3.0)*2.0)/60;
-
     for (int i = 0; i < _dancers.size(); i++)
     {
         _dancers.at(i).update(deltaTime);
         reSortDancerByY(_dancers, i);
     }
-
-    GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER);
-    _timerTextBox.setText(std::to_string(static_cast<int>(GameState::getTime())));
 }
 
 void Level::draw()
@@ -41,8 +35,6 @@ void Level::draw()
     {
         _dancers.at(i).draw();
     }
-
-    _timerTextBox.draw();
 }
 
 void Level::reset()
@@ -106,19 +98,5 @@ LeoEngine::SpriteStatic Level::_makeBackgroundSprite()
     sprite.setPosition(BACKGROUND_START_X, BACKGROUND_START_Y);
     sprite.setSize(BACKGROUND_WIDTH, BACKGROUND_HEIGHT);
     return sprite;
-}
-
-void Level::_initializeTimerTextBox()
-{
-    static const std::string FONT_FILENAME = "FreeSerif.ttf";
-    static const LeoEngine::Colour TEXT_COLOUR(0xff, 0xff, 0xff, 0xff);
-    static int TEXT_SIZE = 50;
-
-    _timerTextBox.setFontFilename(FONT_FILENAME);
-    _timerTextBox.setText("00");
-    _timerTextBox.setTextSize(TEXT_SIZE);
-    _timerTextBox.setTextColour(TEXT_COLOUR);
-    _timerTextBox.setOrigin(LeoEngine::UIAnchor::TOP_MIDDLE);
-    _timerTextBox.setPosition(DANCE_FLOOR_START_X/2, 0);
 }
 
