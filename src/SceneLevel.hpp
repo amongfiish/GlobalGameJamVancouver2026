@@ -32,9 +32,14 @@ public:
     static constexpr double FAILURE_DELTA_TIME = -10.0;
 
 private:
+
+    static constexpr int _TARGET_PORTRAIT_X = 304;
+    static constexpr int _TARGET_PORTRAIT_Y = 158;
+
     std::shared_ptr<LeoEngine::Animation> _gameOverAnimation;
     
-    //LeoEngine::SpriteAnimated _animationSprite;
+    LeoEngine::SpriteAnimated _animationSprite;
+    LeoEngine::SpriteAnimated _targetPortrait;
 
     // when the timer runs out
     void _handleGameOver();

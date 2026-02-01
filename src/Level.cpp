@@ -39,8 +39,6 @@ void Level::draw()
 
 void Level::reset()
 {
-    GameState::resetTime();
-
     for (auto& dancer : _dancers)
     {
         dancer.reset();

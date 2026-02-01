@@ -3,6 +3,7 @@
 #include "LeoEngine/Input.hpp"
 #include "LeoEngine/Graphics.hpp"
 #include "LeoEngine/Collision.hpp"
+#include "LeoEngine/Colour.hpp"
 #include "SceneLevel.hpp"
 #include "GameState.hpp"
 
@@ -17,6 +18,9 @@ SceneLevel::SceneLevel()
     _sidebarBackgroundSprite.setTextureFilename("sidebar.png");
     _sidebarBackgroundSprite.setPosition(Level::BACKGROUND_WIDTH, 0);
     _sidebarBackgroundSprite.setSize(128, Level::BACKGROUND_HEIGHT);
+
+    _targetPortrait.getSprite().setPosition(_TARGET_PORTRAIT_X, _TARGET_PORTRAIT_Y);
+    _targetPortrait.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
 
     _gameOverAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 3, 1.0);
 
@@ -61,12 +65,18 @@ void SceneLevel::draw()
 
     _sidebarBackgroundSprite.draw();
     _timerTextBox.draw();
+
+    _targetPortrait.draw();
 }
 
 void SceneLevel::onActivate()
 {
     _level = GameState::getCurrentLevel();
     _level->reset();
+
+    _targetPortrait.setAnimation(Dancer::IDLE_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
+
+    GameState::resetTime();
 
     LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
 }
@@ -93,12 +103,12 @@ void SceneLevel::_handleVictory()
     _updateTimerText();
 
     _unmaskAnimationElapsedTime = 0.0;
-    //_animationSprite.setAnimation(Dancer::VICTORY_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
-    //_animationSprite.setLoop(false);
-    //_animationSprite.setCurrentFrame(0);
+    _animationSprite.setAnimation(Dancer::VICTORY_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
+    _animationSprite.setLoop(false);
+    _animationSprite.setCurrentFrame(0);
     LeoEngine::Pair<int, int> targetPosition = _level->getTarget()->getAbsolutePosition();
-    //_animationSprite.getSprite().setPosition(targetPosition.first, targetPosition.second);
-    //_animationSprite.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
+    _animationSprite.getSprite().setPosition(targetPosition.first, targetPosition.second);
+    _animationSprite.getSprite().setSize(Dancer::SIZE, Dancer::SIZE);
 
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
 }
@@ -149,7 +159,7 @@ void SceneLevel::_updateGameOver(double deltaTime)
 
 void SceneLevel::_updateVictory(double deltaTime)
 {
-    //_animationSprite.update(deltaTime);
+    _animationSprite.update(deltaTime);
 
     _unmaskAnimationElapsedTime += deltaTime;
     if (_unmaskAnimationElapsedTime >= _UNMASK_DURATION)
@@ -157,8 +167,13 @@ void SceneLevel::_updateVictory(double deltaTime)
         // set next level
         GameState::nextLevel();
         _state = State::RUNNING;
-        //_animationSprite.setAnimation(nullptr);
-        onActivate();
+        _animationSprite.setAnimation(nullptr);
+
+        _level = GameState::getCurrentLevel();
+        _level->reset();
+        LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
+
+        _targetPortrait.setAnimation(Dancer::IDLE_ANIMATIONS[static_cast<int>(_level->getTarget()->getType())]);
     }
 }
 
@@ -177,7 +192,10 @@ void SceneLevel::_drawGameOver()
 
 void SceneLevel::_drawVictory()
 {
-    //_animationSprite.draw();
+    static LeoEngine::Colour backgroundColour(0x30, 0x11, 0x2f, 0xff);
+
+    LeoEngine::Services::get().getGraphics()->fill(backgroundColour);
+    _animationSprite.draw();
 }
 
 void SceneLevel::_initializeTimerTextBox()
