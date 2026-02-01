@@ -8,11 +8,20 @@ class GameState
 public:
     GameState() = delete;
 
-    static void setCurrentLevel(Level& level);
-    static Level& getCurrentLevel();
+    static void setCurrentLevel(Level* level);
+    static Level* getCurrentLevel();
+
+    static void resetTime();
+    static void addTime(double deltaTime);
+    static double getTime();
 
 private:
+    static constexpr double _INITIAL_TIMER = 10.0;
+
     static Level* _currentLevel;
+
+    // how long does the player have left?
+    static double _timer;
 };
 
 #endif

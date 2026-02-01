@@ -12,33 +12,38 @@ public:
     // just indicates which animation to use
     enum class Type
     {
-        DANCER_A=0,
-        DANCER_B,
-        DANCER_C,
-        DANCER_D 
+        BAUTA=0,
+        COLOMBINA,
+        GATTO,
+        JESTER,
+        MEDICO,
+        VOLTO 
     };
 
-    Dancer(Type type, std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);
+    Dancer(std::function<LeoEngine::Pair<double, double>(double)>* positionFunction, LeoEngine::Pair<double, double> position, LeoEngine::Pair<double, double> scale, double initialTime, double speed);
     ~Dancer();
 
     void update(double deltaTime);
     void draw();
 
+    void reset();
+
     LeoEngine::Pair<int, int> getAbsolutePosition() const;
 
     void setLevelSpeedMultiplier(double multiplier);
 
-    static constexpr int NUMBER_OF_TYPES = 4;
+    void setType(Type type);
+
+    static constexpr int NUMBER_OF_TYPES = 6;
 
     static constexpr int SIZE = 32;
 
 private:
-    static const std::string _ANIMATION_FILENAMES[NUMBER_OF_TYPES];
+    static const std::shared_ptr<LeoEngine::Animation> _ANIMATIONS[NUMBER_OF_TYPES];
 
-    static constexpr int _DANCE_FLOOR_START_X = 0;
-    static constexpr int _DANCE_FLOOR_START_Y = 0;
-    static constexpr int _DANCE_FLOOR_WIDTH = 256;
-    static constexpr int _DANCE_FLOOR_HEIGHT = 256;
+    static constexpr int _NUMBER_OF_ANIMATION_FRAMES = 1;
+    static constexpr double _ANIMATION_FRAME_DISPLAY_LENGTH = 0.1;
+
 
     Type _type;
 

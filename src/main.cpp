@@ -2,7 +2,9 @@
 #include "LeoEngine/Game.hpp"
 #include "LeoEngine/SceneCollection.hpp"
 #include "LeoEngine/File.hpp"
-#include "SceneTesting.hpp"
+#include "GameState.hpp"
+#include "Levels.hpp"
+#include "SceneLevel.hpp"
 
 int main(int argc, char* argv[])
 {
@@ -11,8 +13,8 @@ int main(int argc, char* argv[])
 
     leoEngine.setFramerate(120);
     LeoEngine::Services::get().getGraphics()->setWindowTitle("GlobalGameJamVancouver2026");
-    LeoEngine::Services::get().getGraphics()->setWindowDimensions(768, 768);
-    LeoEngine::Services::get().getGraphics()->setRenderDimensions(256, 256);
+    LeoEngine::Services::get().getGraphics()->setWindowDimensions(1152, 768);
+    LeoEngine::Services::get().getGraphics()->setRenderDimensions(384, 256);
     LeoEngine::Services::get().getGraphics()->setWindowBordered(true);
     LeoEngine::Services::get().getGraphics()->setWindowFullscreen(false);
     LeoEngine::Services::get().getGraphics()->setWindowResizable(true);
@@ -21,7 +23,10 @@ int main(int argc, char* argv[])
     LeoEngine::File::setWriteDirectory("TurboCity", "GlobalGameJameVancouver2026");
 
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();
-    int testSceneID = gameSceneCollection.addScene<SceneTesting>();
+    int testSceneID = gameSceneCollection.addScene<SceneLevel>();
+
+    GameState::setCurrentLevel(&Levels::circle);
+    GameState::getCurrentLevel()->setSpeedMultiplier(1.0);
 
     gameSceneCollection.setCurrentScene(testSceneID);
 

@@ -8,7 +8,7 @@ SceneTesting::SceneTesting()
 {
     for (int i = 0; i < 20; i++)
     {
-        _dancers.emplace_back(Dancer::Type::DANCER_A, &circleFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.5, 0.4), i*((2*M_PI)/20), 2.5);
+        _dancers.emplace_back(&circleFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(0.5, 0.4), i*((2*M_PI)/20), 2.5);
         _dancers.at(i).update(0);
 
         reSortDancerByY(_dancers, i);
@@ -16,13 +16,13 @@ SceneTesting::SceneTesting()
 
     for (int i = 0; i < 40; i++)
     {
-        _dancers.emplace_back(Dancer::Type::DANCER_A, &circleFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(1.0, 0.9), i*((2*M_PI)/40), 1.0);
+        _dancers.emplace_back(&circleFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(1.0, 0.9), i*((2*M_PI)/40), 1.0);
         _dancers.at(i).update(0);
 
         reSortDancerByY(_dancers, i);
     }
 
-    _dancers.emplace_back(Dancer::Type::DANCER_A, &sinFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(1.0, 0.8), 0, 1.0);
+    _dancers.emplace_back(&sinFunction, LeoEngine::Pair<double, double>(0.0, 0.0), LeoEngine::Pair<double, double>(1.0, 0.8), 0, 1.0);
 }
 
 SceneTesting::~SceneTesting()
