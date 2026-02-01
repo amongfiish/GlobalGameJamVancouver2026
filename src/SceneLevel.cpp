@@ -115,6 +115,8 @@ void SceneLevel::onActivate()
     LeoEngine::Services::get().getAudio()->playTrack(_musicTrackID, -1, 1.0);
 
     _updateLevelCountText();
+
+    LeoEngine::Services::get().getGraphics()->hideCursor();
 }
 
 void SceneLevel::onDeactivate()
@@ -122,6 +124,8 @@ void SceneLevel::onDeactivate()
     _level = nullptr;
 
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 1.0);
+
+    LeoEngine::Services::get().getGraphics()->showCursor();
 }
 
 void SceneLevel::fireNotification(const LeoEngine::Pair<double, double>& initialPosition, std::string text)
