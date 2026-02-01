@@ -96,6 +96,13 @@ void SceneLevel::_handleGameOver()
 {
     _state = State::GAME_OVER;
 
+    _gameOverAnimationElapsedTime = 0.0;
+    _animationSprite.setAnimation(_gameOverAnimation);
+    _animationSprite.setLoop(false);
+    _animationSprite.setCurrentFrame(0);
+    _animationSprite.getSprite().setPosition(0, 0);
+    _animationSprite.getSprite().setSize(256, 256);
+
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 0);
 }
 
@@ -158,7 +165,7 @@ void SceneLevel::_updateRunning(double deltaTime)
 
 void SceneLevel::_updateGameOver(double deltaTime)
 {
-
+    _animationSprite.update(deltaTime);
 }
 
 void SceneLevel::_updateVictory(double deltaTime)
@@ -195,7 +202,7 @@ void SceneLevel::_drawRunning()
 
 void SceneLevel::_drawGameOver()
 {
-
+    _animationSprite.draw();
 }
 
 void SceneLevel::_drawVictory()
@@ -230,8 +237,8 @@ void SceneLevel::_updateTimerText()
 void SceneLevel::_initializeLevelCountTextBox()
 {
     static constexpr int ORIGIN_X = Level::BACKGROUND_WIDTH + 64;
-    static constexpr int ORIGIN_Y = 10;
-    static constexpr int TEXT_SIZE = 12;
+    static constexpr int ORIGIN_Y = 8;
+    static constexpr int TEXT_SIZE = 15;
     static const std::string FONT_FILENAME = "FreeSerif.ttf";
     static const LeoEngine::Colour TEXT_COLOUR(0x00, 0x00, 0x00, 0xff);
 

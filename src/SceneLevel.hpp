@@ -75,6 +75,9 @@ private:
     // game over/victory
     static constexpr double _UNMASK_DURATION = 2.8;
     double _unmaskAnimationElapsedTime;
+
+    static constexpr double _GAME_OVER_DURATION = 3.0;
+    double _gameOverAnimationElapsedTime;
 };
 
 #endif
