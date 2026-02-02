@@ -198,12 +198,12 @@ void SceneLevel::_updateRunning(double deltaTime)
         if (LeoEngine::checkForOverlap(clickPosition, targetBounds))
         {
             _handleVictory();
-            fireNotification(doubleClickPosition, "+" + std::to_string(VICTORY_DELTA_TIME));
+            fireNotification(doubleClickPosition, "+" + std::to_string(static_cast<int>(VICTORY_DELTA_TIME)));
         }
         else
         {
             _handleFailure();
-            fireNotification(doubleClickPosition, "-" + std::to_string(FAILURE_DELTA_TIME));
+            fireNotification(doubleClickPosition, "-" + std::to_string(static_cast<int>(FAILURE_DELTA_TIME)));
         }
     }
 
