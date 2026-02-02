@@ -144,6 +144,10 @@ void SceneLevel::_handleGameOver()
     _animationSprite.getSprite().setPosition(0, 0);
     _animationSprite.getSprite().setSize(256, 256);
 
+    _gameOverAnimationElapsedTime = 0.0;
+
+    LeoEngine::Services::get().getInput()->lockInput();
+
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 0);
 }
 
@@ -218,6 +222,16 @@ void SceneLevel::_updateRunning(double deltaTime)
 void SceneLevel::_updateGameOver(double deltaTime)
 {
     _animationSprite.update(deltaTime);
+
+    if (_gameOverAnimationElapsedTime >= _GAME_OVER_DURATION)
+    {
+        LeoEngine::Services::get().getInput()->unlockInput();
+        _gameOverAnimationElapsedTime = -1;
+    }
+    else if (_gameOverAnimationElapsedTime >= 0)
+    {
+        _gameOverAnimationElapsedTime += deltaTime;
+    }
     
     if (LeoEngine::Services::get().getInput()->getMouseButtonState(1) == LeoEngine::KeyState::PRESSED)
     {

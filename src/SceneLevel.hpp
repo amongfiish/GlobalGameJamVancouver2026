@@ -14,15 +14,18 @@ class Notification
 public:
     Notification(const LeoEngine::Pair<double, double>& initialPosition, std::string text)
         : _renderedText(nullptr),
-          _position(initialPosition),
           _elapsedTime(0.0)
     {
         LeoEngine::TextDrawData textDrawData("FreeSerif.ttf", 10, LeoEngine::Colour(0xff, 0xff, 0xff, 0xff));
         _renderedText = LeoEngine::Services::get().getGraphics()->renderText(text, textDrawData);
 
+        LeoEngine::Pair<int, int> textDimensions = _renderedText->getDimensions();
+        _position.first = initialPosition.first - textDimensions.first/2;
+        _position.second = initialPosition.second - textDimensions.second/2;
+
         LeoEngine::RandomNumberGenerator rng;
-        _velocity.first = static_cast<double>(rng.getNextNumber(10, 30) - 20);
-        _velocity.second = static_cast<double>(-rng.getNextNumber(5, 10));
+        _velocity.first = static_cast<double>(rng.getNextNumber(_MIN_SPEED_X, _MAX_SPEED_X)) * (rng.getNextNumber(0,1)?-1:1);
+        _velocity.second = static_cast<double>(-rng.getNextNumber(_MIN_SPEED_Y, _MAX_SPEED_Y));
     }
 
     ~Notification()
@@ -52,6 +55,10 @@ public:
 
 private:
     static constexpr double _DISPLAY_TIME = 1.0;
+    static constexpr double _MIN_SPEED_X = 0.0;
+    static constexpr double _MAX_SPEED_X = 20.0;
+    static constexpr double _MIN_SPEED_Y = 20.0;
+    static constexpr double _MAX_SPEED_Y = 40.0;
     double _elapsedTime;
 
     LeoEngine::Pair<double, double> _position;
@@ -137,7 +144,7 @@ private:
     double _unmaskAnimationElapsedTime;
     double _unmaskSFXTimer;
 
-    static constexpr double _GAME_OVER_DURATION = 3.0;
+    static constexpr double _GAME_OVER_DURATION = 1.0;
     double _gameOverAnimationElapsedTime;
 };
 

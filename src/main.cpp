@@ -30,15 +30,15 @@ int main(int argc, char* argv[])
     LeoEngine::Game game;
 
     leoEngine.setFramerate(60);
-    LeoEngine::Services::get().getGraphics()->setWindowTitle("GlobalGameJamVancouver2026");
+    LeoEngine::Services::get().getGraphics()->setWindowTitle("Blood Gala");
     LeoEngine::Services::get().getGraphics()->setWindowDimensions(1152, 768);
     LeoEngine::Services::get().getGraphics()->setRenderDimensions(384, 256);
     LeoEngine::Services::get().getGraphics()->setWindowBordered(true);
     LeoEngine::Services::get().getGraphics()->setWindowFullscreen(false);
     LeoEngine::Services::get().getGraphics()->setWindowResizable(true);
     LeoEngine::Services::get().getGraphics()->setWindowGrabCursor(false);
-    LeoEngine::Services::get().getGraphics()->setRenderVSync(true);
-    LeoEngine::File::setWriteDirectory("TurboCity", "GlobalGameJameVancouver2026");
+    LeoEngine::Services::get().getGraphics()->setRenderVSync(false);
+    LeoEngine::File::setWriteDirectory("TurboCity", "BloodGala");
 
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();
 
