@@ -21,7 +21,7 @@ public:
     static int getLevel();
 
 private:
-    static constexpr double _INITIAL_TIMER = 14.0;
+    static constexpr double _INITIAL_TIMER = 20.0;
 
     static std::shared_ptr<Level> _currentLevel;
 

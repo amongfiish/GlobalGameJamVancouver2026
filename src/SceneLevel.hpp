@@ -82,11 +82,15 @@ public:
     void fireNotification(const LeoEngine::Pair<double, double>& initialPosition, std::string text);
 
     static constexpr double VICTORY_DELTA_TIME = 5.0;
-    static constexpr double FAILURE_DELTA_TIME = -10.0;
+    static constexpr double FAILURE_DELTA_TIME = -5.0;
 
 private:
     static constexpr int _TARGET_PORTRAIT_X = 304;
     static constexpr int _TARGET_PORTRAIT_Y = 158;
+
+    static constexpr int _CURSOR_SIZE = 10;
+
+    LeoEngine::SpriteStatic _cursorSprite;
 
     std::vector<Notification> _notifications;
 
