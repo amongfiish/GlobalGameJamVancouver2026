@@ -4,6 +4,10 @@
 #include "DancePatterns.hpp"
 #include "Dancer.hpp"
 
+#if defined(_WIN32)
+    #define M_PI 3.141593
+#endif
+
 LeoEngine::RandomNumberGenerator Levels::_rng;
 
 std::function<std::unique_ptr<Level>(int)> Levels::levelMakers[] = {
