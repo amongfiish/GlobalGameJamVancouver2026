@@ -306,7 +306,7 @@ void SceneLevel::_initializeLevelCountTextBox()
     static const LeoEngine::Colour TEXT_COLOUR(0x00, 0x00, 0x00, 0xff);
 
     _levelCountTextBox.setFontFilename(FONT_FILENAME);
-    _levelCountTextBox.setText("tutorial");
+    _levelCountTextBox.setText("Turbo City Games");
     _levelCountTextBox.setTextSize(TEXT_SIZE);
     _levelCountTextBox.setTextColour(TEXT_COLOUR);
     _levelCountTextBox.setOrigin(LeoEngine::UIAnchor::TOP_MIDDLE);
@@ -317,13 +317,6 @@ void SceneLevel::_updateLevelCountText()
 {
     int level = GameState::getLevel();
 
-    if (level == 0)
-    {
-        _levelCountTextBox.setText("tutorial");
-    }
-    else
-    {
-        _levelCountTextBox.setText(rom::numerus(static_cast<long long unsigned int>(level)).ad_filum());
-    }
+    _levelCountTextBox.setText(rom::numerus(static_cast<long long unsigned int>(level+1)).ad_filum());
 }
 
