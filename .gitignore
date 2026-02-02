@@ -4,4 +4,5 @@ build/
 .vs/
 CMakeSettings.json
 archives/
+CMakeFiles/
 
