@@ -178,7 +178,11 @@ void SceneLevel::_updateRunning(double deltaTime)
     static constexpr double BPM_TIMER_MULTIPLIER = ((110.0/3.0)*2.0)/60;
 
     double speedMultiplier = 1.0 * pow(1.02, GameState::getLevel());
-    GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER * speedMultiplier);
+    if (GameState::getLevel() > 0)
+    {
+        GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER * speedMultiplier);
+    }
+
     int time = GameState::getTime();
     if (time <= 0)
     {
