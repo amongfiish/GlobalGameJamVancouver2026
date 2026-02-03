@@ -42,6 +42,8 @@ SceneLevel::~SceneLevel()
 
 void SceneLevel::update(double deltaTime)
 {
+    _elapsedTime += deltaTime;
+
     switch (_state)
     {
     case State::RUNNING:
@@ -73,8 +75,10 @@ void SceneLevel::update(double deltaTime)
 
 void SceneLevel::draw()
 {
-    static LeoEngine::Colour backgroundColour(0x30, 0x11, 0x2f, 0xff);
-    LeoEngine::Services::get().getGraphics()->drawRectangle(backgroundColour, true, Level::BACKGROUND_START_X, Level::BACKGROUND_START_Y, Level::BACKGROUND_WIDTH, Level::BACKGROUND_HEIGHT);
+    static const LeoEngine::Colour BACKGROUND_COLOUR(0x30, 0x11, 0x2f, 0xff);
+    static const LeoEngine::Colour WHITE(0xff, 0xff, 0xff, 0xff);
+
+    LeoEngine::Services::get().getGraphics()->drawRectangle(BACKGROUND_COLOUR, true, Level::BACKGROUND_START_X, Level::BACKGROUND_START_Y, Level::BACKGROUND_WIDTH, Level::BACKGROUND_HEIGHT);
 
     switch (_state)
     {
@@ -94,6 +98,17 @@ void SceneLevel::draw()
     _timerTextBox.draw();
     _targetPortrait.draw();
 
+    // draw the highlight boxes AFTER the sidebar 
+    if (_state == State::RUNNING)
+    {
+        if (GameState::getLevel() == 0)
+        {
+            LeoEngine::Services::get().getGraphics()->drawRectangle(WHITE, false, _dancerHighlightRectangle);
+            LeoEngine::Services::get().getGraphics()->drawRectangle(WHITE, false, _sidebarHighlightRectangle);
+        }
+    }
+
+
     for (auto& notification : _notifications)
     {
         notification.draw();
@@ -104,6 +119,8 @@ void SceneLevel::draw()
 
 void SceneLevel::onActivate()
 {
+    _elapsedTime = 0.0;
+
     _state = State::RUNNING;
 
     _level = GameState::getCurrentLevel();
@@ -184,6 +201,9 @@ void SceneLevel::_handleFailure()
 void SceneLevel::_updateRunning(double deltaTime)
 {
     static constexpr double BPM_TIMER_MULTIPLIER = ((110.0/3.0)*2.0)/60;
+    static constexpr int HIGHLIGHT_RECTANGLE_PULSE_SIZE = 5;
+    static constexpr double HIGHLIGHT_RECTANGLE_PULSE_SPEED = 7.5;
+    static constexpr double SIN_OFFSET = 2.0;
 
     double speedMultiplier = 1.0 * pow(1.02, GameState::getLevel());
     if (GameState::getLevel() > 0)
@@ -199,6 +219,24 @@ void SceneLevel::_updateRunning(double deltaTime)
         _handleGameOver();
     }
     _updateTimerText();
+
+    if (GameState::getLevel() == 0)
+    {
+        double sinValue = SIN_OFFSET + sin(_elapsedTime * HIGHLIGHT_RECTANGLE_PULSE_SPEED);
+        int currentHighlightSizeDifference = sinValue * HIGHLIGHT_RECTANGLE_PULSE_SIZE;
+
+        LeoEngine::Pair<int, int> targetPosition = _level->getTarget()->getAbsolutePosition();
+
+        _dancerHighlightRectangle.x = targetPosition.first - currentHighlightSizeDifference/2;
+        _dancerHighlightRectangle.y = targetPosition.second - currentHighlightSizeDifference/2;
+        _dancerHighlightRectangle.width = Dancer::SIZE + currentHighlightSizeDifference;
+        _dancerHighlightRectangle.height = Dancer::SIZE + currentHighlightSizeDifference;
+
+        _sidebarHighlightRectangle.x = _TARGET_PORTRAIT_X - currentHighlightSizeDifference/2;
+        _sidebarHighlightRectangle.y = _TARGET_PORTRAIT_Y - currentHighlightSizeDifference/2;
+        _sidebarHighlightRectangle.width = Dancer::SIZE + currentHighlightSizeDifference;
+        _sidebarHighlightRectangle.height = Dancer::SIZE + currentHighlightSizeDifference;
+    }
 
     if (LeoEngine::Services::get().getInput()->getMouseButtonState(1) == LeoEngine::KeyState::PRESSED)
     {
@@ -294,6 +332,8 @@ void SceneLevel::_updateVictory(double deltaTime)
 
 void SceneLevel::_drawRunning()
 {
+    static const LeoEngine::Colour WHITE(0xff, 0xff, 0xff, 0xff);
+
     _level->draw();
 
     /*

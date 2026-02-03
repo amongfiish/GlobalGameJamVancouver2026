@@ -99,6 +99,9 @@ private:
 
     LeoEngine::SpriteStatic _cursorSprite;
 
+    LeoEngine::Rectangle<int> _dancerHighlightRectangle;
+    LeoEngine::Rectangle<int> _sidebarHighlightRectangle;
+
     std::vector<Notification> _notifications;
     
     LeoEngine::SpriteAnimated _animationSprite;
@@ -118,6 +121,8 @@ private:
     void _drawRunning();
     void _drawGameOver();
     void _drawVictory();
+
+    double _elapsedTime;
 
     State _state;
 
