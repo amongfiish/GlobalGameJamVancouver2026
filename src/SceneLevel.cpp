@@ -138,6 +138,8 @@ void SceneLevel::_handleGameOver()
 {
     _state = State::GAME_OVER;
 
+    _notifications.clear();
+
     _gameOverAnimationElapsedTime = 0.0;
     _animationSprite.setAnimation(_gameOverTransitionAnimation);
     _animationSprite.setLoop(false);
