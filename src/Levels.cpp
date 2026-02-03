@@ -29,7 +29,7 @@ std::vector<Dancer::Type> generateTypeVector(Dancer::Type targetType)
     return types;
 }
 
-LeoEngine::Pair<double, double> claimGridSpace(std::vector<LeoEngine::Pair<double, double>> grid, int spaceIndex=-1)
+LeoEngine::Pair<double, double> claimGridSpace(std::vector<LeoEngine::Pair<double, double>>& grid, int spaceIndex=-1)
 {
     static LeoEngine::RandomNumberGenerator rng;
 
