@@ -29,6 +29,21 @@ std::vector<Dancer::Type> generateTypeVector(Dancer::Type targetType)
     return types;
 }
 
+LeoEngine::Pair<double, double> claimGridSpace(std::vector<LeoEngine::Pair<double, double>> grid, int spaceIndex=-1)
+{
+    static LeoEngine::RandomNumberGenerator rng;
+
+    if (spaceIndex < 0)
+    {
+        spaceIndex = rng.getNextNumber(0, grid.size()-1);
+    }
+
+    LeoEngine::Pair<double, double> chosenGridSlot = grid.at(spaceIndex);
+    grid.erase(grid.begin() + spaceIndex);
+
+    return chosenGridSlot;
+}
+
 Dancer::Type Levels::_getRandomType()
 {
     static std::vector<Dancer::Type> randomTypes = { Dancer::Type::BAUTA, Dancer::Type::COLOMBINA, Dancer::Type::GATTO, Dancer::Type::JESTER, Dancer::Type::MEDICO, Dancer::Type::VOLTO };
@@ -151,10 +166,7 @@ std::unique_ptr<Level> Levels::makeStatic(int difficulty)
 
     for (int i = 0; i < numberOfDancers; i++)
     {
-        int chosenGridSlotIndex = _rng.getNextNumber(0, availableGridSpaces.size()-1);
-        LeoEngine::Pair<double, double> chosenGridSlot = availableGridSpaces.at(chosenGridSlotIndex);
-        availableGridSpaces.erase(availableGridSpaces.begin()+chosenGridSlotIndex);
-        level->addDancer(Dancer(&DancePatterns::still, chosenGridSlot, LeoEngine::Pair<double, double>(1.0, 1.0), 0.0, 1.0));
+        level->addDancer(Dancer(&DancePatterns::still, claimGridSpace(availableGridSpaces), LeoEngine::Pair<double, double>(1.0, 1.0), 0.0, 1.0));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -172,7 +184,7 @@ std::unique_ptr<Level> Levels::makeColinear(int difficulty)
     double angle = _rng.getNextNumber(0, 999) / 999.0 * M_PI;
     double slope = tan(angle);
 
-    std::vector<LeoEngine::Pair<double, double>> availableGridPositions = generateGrid(16);
+    std::vector<LeoEngine::Pair<double, double>> availableGridSpaces = generateGrid(16);
 
     int numberOfDancers = 8 + 2*difficulty;
     if (numberOfDancers > 256)
@@ -185,8 +197,7 @@ std::unique_ptr<Level> Levels::makeColinear(int difficulty)
         bool movingForwards = static_cast<bool>(_rng.getNextNumber(0,1));
         bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
 
-        int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
-        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))) * (mirror?-1:1),slope/(sqrt(1+pow(slope,2))) * (movingForwards?1:-1)), 0.0, 0.6));
+        level->addDancer(Dancer(&DancePatterns::linear, claimGridSpace(availableGridSpaces), LeoEngine::Pair<double, double>(1/(sqrt(1+pow(slope,2))) * (mirror?-1:1),slope/(sqrt(1+pow(slope,2))) * (movingForwards?1:-1)), 0.0, 0.6));
     }
 
     Dancer::Type targetType = _getRandomType();
@@ -201,7 +212,7 @@ std::unique_ptr<Level> Levels::makeLinearScatter(int difficulty)
 {
     auto level = std::make_unique<Level>();
 
-    std::vector<LeoEngine::Pair<double, double>> availableGridPositions = generateGrid(16);
+    std::vector<LeoEngine::Pair<double, double>> availableGridSpaces = generateGrid(16);
 
     int numberOfDancers = 8 + 2*difficulty;
     if (numberOfDancers > 256)
@@ -217,8 +228,7 @@ std::unique_ptr<Level> Levels::makeLinearScatter(int difficulty)
         bool movingForwards = static_cast<bool>(_rng.getNextNumber(0,1));
         bool mirror = static_cast<bool>(_rng.getNextNumber(0,1));
 
-        int chosenGridPosition = _rng.getNextNumber(0, availableGridPositions.size()-1);
-        level->addDancer(Dancer(&DancePatterns::linear, availableGridPositions.at(chosenGridPosition), LeoEngine::Pair<double, double>(1.0/(sqrt(1+pow(slope,2))) * (mirror ? -1.0 : 1.0),slope/(sqrt(1+pow(slope,2))) * (movingForwards ? 1.0 : -1.0)), 0.0, 0.6));
+        level->addDancer(Dancer(&DancePatterns::linear, claimGridSpace(availableGridSpaces), LeoEngine::Pair<double, double>(1.0/(sqrt(1+pow(slope,2))) * (mirror ? -1.0 : 1.0),slope/(sqrt(1+pow(slope,2))) * (movingForwards ? 1.0 : -1.0)), 0.0, 0.6));
     }
 
     Dancer::Type targetType = _getRandomType();
