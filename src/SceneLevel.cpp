@@ -191,7 +191,7 @@ void SceneLevel::_updateRunning(double deltaTime)
         GameState::addTime(-deltaTime * BPM_TIMER_MULTIPLIER * speedMultiplier);
     }
 
-    int time = GameState::getTime();
+    double time = GameState::getTime();
     if (time <= 0)
     {
         // reset timer to 0 (for visual purposes mainly)

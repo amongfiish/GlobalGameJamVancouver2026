@@ -55,10 +55,10 @@ public:
 
 private:
     static constexpr double _DISPLAY_TIME = 1.0;
-    static constexpr double _MIN_SPEED_X = 0.0;
-    static constexpr double _MAX_SPEED_X = 20.0;
-    static constexpr double _MIN_SPEED_Y = 20.0;
-    static constexpr double _MAX_SPEED_Y = 40.0;
+    static constexpr int _MIN_SPEED_X = 0;
+    static constexpr int _MAX_SPEED_X = 20;
+    static constexpr int _MIN_SPEED_Y = 20;
+    static constexpr int _MAX_SPEED_Y = 40;
     double _elapsedTime;
 
     LeoEngine::Pair<double, double> _position;
