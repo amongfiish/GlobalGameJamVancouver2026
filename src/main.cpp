@@ -38,6 +38,7 @@ int main(int argc, char* argv[])
     LeoEngine::Services::get().getGraphics()->setWindowResizable(true);
     LeoEngine::Services::get().getGraphics()->setWindowGrabCursor(false);
     LeoEngine::Services::get().getGraphics()->setRenderVSync(false);
+    LeoEngine::Services::get().getGraphics()->setWindowIcon("icon.png");
     LeoEngine::File::setWriteDirectory("TurboCity", "BloodGala");
 
     LeoEngine::SceneCollection& gameSceneCollection = game.getSceneCollection();

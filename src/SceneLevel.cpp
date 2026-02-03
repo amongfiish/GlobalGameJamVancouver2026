@@ -148,6 +148,7 @@ void SceneLevel::_handleGameOver()
     _gameOverAnimationElapsedTime = 0.0;
 
     LeoEngine::Services::get().getInput()->lockInput();
+    _inputUnlockedAlready = false;
 
     LeoEngine::Services::get().getAudio()->stopTrack(_musicTrackID, 0);
 }
