@@ -100,8 +100,6 @@ private:
     LeoEngine::SpriteStatic _cursorSprite;
 
     std::vector<Notification> _notifications;
-
-    std::shared_ptr<LeoEngine::Animation> _gameOverAnimation;
     
     LeoEngine::SpriteAnimated _animationSprite;
     LeoEngine::SpriteAnimated _targetPortrait;
@@ -139,13 +137,19 @@ private:
     int _musicTrackID;
 
     // game over/victory
+    std::shared_ptr<LeoEngine::Animation> _gameOverTransitionAnimation;
+    std::shared_ptr<LeoEngine::Animation> _gameOverInstructionAnimation;
+
     static constexpr double _UNMASK_DURATION = 2.8;
     static constexpr double _UNMASK_SFX_DELAY = 1.0;
     double _unmaskAnimationElapsedTime;
     double _unmaskSFXTimer;
 
-    static constexpr double _GAME_OVER_DURATION = 1.0;
+    static constexpr double _GAME_OVER_TRANSITION_DURATION = 2.0;
+    static constexpr double _GAME_OVER_INPUT_LOCK_DURATION = 1.0;
     double _gameOverAnimationElapsedTime;
+
+    bool _inputUnlockedAlready;
 };
 
 #endif

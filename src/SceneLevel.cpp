@@ -28,7 +28,8 @@ SceneLevel::SceneLevel()
     _cursorSprite.setTextureFilename("cursor.png");
     _cursorSprite.setSize(_CURSOR_SIZE, _CURSOR_SIZE);
 
-    _gameOverAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 3, 1.0);
+    _gameOverTransitionAnimation = LeoEngine::createAnimationFromStripData("game_over_transition.png", 256, 256, 2, 1.0);
+    _gameOverInstructionAnimation = LeoEngine::createAnimationFromStripData("game_over.png", 256, 256, 2, 0.5);
 
     _initializeTimerTextBox();     
     _initializeLevelCountTextBox();
@@ -138,7 +139,7 @@ void SceneLevel::_handleGameOver()
     _state = State::GAME_OVER;
 
     _gameOverAnimationElapsedTime = 0.0;
-    _animationSprite.setAnimation(_gameOverAnimation);
+    _animationSprite.setAnimation(_gameOverTransitionAnimation);
     _animationSprite.setLoop(false);
     _animationSprite.setCurrentFrame(0);
     _animationSprite.getSprite().setPosition(0, 0);
@@ -223,14 +224,28 @@ void SceneLevel::_updateGameOver(double deltaTime)
 {
     _animationSprite.update(deltaTime);
 
-    if (_gameOverAnimationElapsedTime >= _GAME_OVER_DURATION)
+    if (_gameOverAnimationElapsedTime == 0)
+    {
+        LeoEngine::Services::get().getAudio()->playOneShot("game_over.wav");
+    }
+
+    if (_gameOverAnimationElapsedTime >= _GAME_OVER_INPUT_LOCK_DURATION && !_inputUnlockedAlready)
     {
         LeoEngine::Services::get().getInput()->unlockInput();
-        _gameOverAnimationElapsedTime = -1;
+        _inputUnlockedAlready = true;
     }
     else if (_gameOverAnimationElapsedTime >= 0)
     {
         _gameOverAnimationElapsedTime += deltaTime;
+    }
+
+    if (_gameOverAnimationElapsedTime >= _GAME_OVER_TRANSITION_DURATION)
+    {
+        _animationSprite.setAnimation(_gameOverInstructionAnimation);
+        _animationSprite.restartAnimation();
+        _animationSprite.setLoop(true);
+
+        _gameOverAnimationElapsedTime = -1;
     }
     
     if (LeoEngine::Services::get().getInput()->getMouseButtonState(1) == LeoEngine::KeyState::PRESSED)
@@ -303,7 +318,7 @@ void SceneLevel::_initializeTimerTextBox()
     static const LeoEngine::Colour TEXT_COLOUR(0xcd, 0xb0, 0x86, 0xff);
 
     _timerTextBox.setFontFilename(FONT_FILENAME);
-    _timerTextBox.setText("00");
+    _timerTextBox.setText("0");
     _timerTextBox.setTextSize(TEXT_SIZE);
     _timerTextBox.setTextColour(TEXT_COLOUR);
     _timerTextBox.setOrigin(LeoEngine::UIAnchor::TOP_MIDDLE);
