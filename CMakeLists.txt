@@ -8,7 +8,7 @@ project(${PROJECT_NAME})
 
 add_subdirectory(lib/LeoEngine)
 
-file(GLOB SOURCES src/*)
+file(GLOB SOURCES src/game/*)
 
 if (WIN32)
     set(CMAKE_EXE_LINKER_FLAGS "${CMAKE_EXE_LINKER_FLAGS} /SUBSYSTEM:WINDOWS /ENTRY:mainCRTStartup")
